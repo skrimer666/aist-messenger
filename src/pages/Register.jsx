@@ -1,25 +1,29 @@
 import { useState } from 'react';
 
 export default function Register() {
-  const [telegramId, setTelegramId] = useState('');
+  const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
 
-  const sendCode = async () => {
-    if (!telegramId || isNaN(telegramId)) {
-      alert('Введите числовой Telegram ID');
+  const sendSMS = async () => {
+    // Валидация номера
+    const phoneRegex = /^\+?7\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+      alert('Введите номер в формате +79991234567');
       return;
     }
+
     try {
-      const res = await fetch('/api/send-code', {
+      const res = await fetch('/api/send-sms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telegramId: Number(telegramId) })
+        body: JSON.stringify({ phone })
       });
+
       const data = await res.json();
       if (data.ok) {
-        alert('Код отправлен в Telegram!');
+        alert('SMS отправлено!');
       } else {
-        alert('Ошибка: ' + (data.error || 'неизвестно'));
+        alert('Ошибка отправки: ' + (data.error || 'неизвестно'));
       }
     } catch (e) {
       alert('Ошибка сети: ' + e.message);
@@ -27,16 +31,18 @@ export default function Register() {
   };
 
   const verifyCode = async () => {
-    if (!telegramId || !code) {
+    if (!phone || !code) {
       alert('Заполните все поля');
       return;
     }
+
     try {
       const res = await fetch('/api/verify-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telegramId: Number(telegramId), code })
+        body: JSON.stringify({ phone, code })
       });
+
       const data = await res.json();
       if (data.userId) {
         localStorage.setItem('userId', data.userId);
@@ -51,27 +57,69 @@ export default function Register() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>AIST Messenger</h2>
-      <p>Введите ваш Telegram ID (число из getUpdates)</p>
+    <div style={{ padding: 20, maxWidth: 400, margin: '0 auto', fontFamily: 'sans-serif' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>AIST Messenger</h2>
+      
       <input
-        value={telegramId}
-        onChange={e => setTelegramId(e.target.value)}
-        placeholder="410797157"
-        type="number"
-        style={{ display: 'block', margin: '10px 0', padding: 8, width: '100%' }}
+        value={phone}
+        onChange={e => setPhone(e.target.value)}
+        placeholder="+79991234567"
+        style={{
+          display: 'block',
+          width: '100%',
+          padding: 12,
+          fontSize: 16,
+          marginBottom: 12,
+          border: '1px solid #ccc',
+          borderRadius: 6
+        }}
       />
-      <button onClick={sendCode} style={{ marginRight: 10, padding: '8px 16px' }}>
-        Получить код
+      
+      <button
+        onClick={sendSMS}
+        style={{
+          width: '100%',
+          padding: 12,
+          backgroundColor: '#007AFF',
+          color: 'white',
+          border: 'none',
+          borderRadius: 6,
+          fontSize: 16,
+          cursor: 'pointer',
+          marginBottom: 20
+        }}
+      >
+        Получить SMS
       </button>
 
       <input
         value={code}
         onChange={e => setCode(e.target.value)}
-        placeholder="Код из Telegram"
-        style={{ display: 'block', margin: '10px 0', padding: 8, width: '100%' }}
+        placeholder="Код из SMS"
+        style={{
+          display: 'block',
+          width: '100%',
+          padding: 12,
+          fontSize: 16,
+          marginBottom: 12,
+          border: '1px solid #ccc',
+          borderRadius: 6
+        }}
       />
-      <button onClick={verifyCode} style={{ padding: '8px 16px' }}>
+      
+      <button
+        onClick={verifyCode}
+        style={{
+          width: '100%',
+          padding: 12,
+          backgroundColor: '#34C759',
+          color: 'white',
+          border: 'none',
+          borderRadius: 6,
+          fontSize: 16,
+          cursor: 'pointer'
+        }}
+      >
         Войти
       </button>
     </div>
