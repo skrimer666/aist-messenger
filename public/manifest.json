@@ -1,11 +1,11 @@
 {
-  "name": "AIST Messenger",
-  "short_name": "AIST",
-  "description": "Безопасный мессенджер для России",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1e88e5",
+  "name":"AIST Messenger",
+  "short_name":"AIST",
+  "description":"Безопасный мессенджер для России",
+  "start_url":"/",
+  "display":"standalone",
+  "background_color":"#ffffff",
+  "theme_color":"#1e88e5",
   "icons": [
     {
       "src": "/icon-192.png",
