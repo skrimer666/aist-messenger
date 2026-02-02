@@ -1,14 +1,15 @@
-import { Routes, Route } from 'react-router-dom';
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 
-function App() {
+export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Register />} />
-      <Route path="/profile" element={<Profile />} />
-    </Routes>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
