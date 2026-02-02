@@ -1,3 +1,4 @@
+// src/pages/Profile.jsx
 import QRCode from 'qrcode.react';
 import { useEffect, useState } from 'react';
 
@@ -10,17 +11,17 @@ export default function Profile() {
 
   return (
     <div style={{ padding: 20, textAlign: 'center' }}>
-      <h2>Мой профиль</h2>
+      <h1>Мой профиль</h1>
       {userId ? (
         <>
           <p>ID: {userId}</p>
           <QRCode value={`aist://user/${userId}`} size={200} />
         </>
       ) : (
-        <p>Не авторизован. <a href="/">Войти</a></p>
+        <p>
+          Не авторизован. <a href="/">Войти</a>
+        </p>
       )}
     </div>
-  );export default function Profile() {
-  return <div>Profile Page</div>;
-}
+  );
 }
