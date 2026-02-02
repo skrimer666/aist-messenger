@@ -20,5 +20,7 @@ export default function Profile() {
         <p>Не авторизован. <a href="/">Войти</a></p>
       )}
     </div>
-  );
+  );export default function Profile() {
+  return <div>Profile Page</div>;
+}
 }
