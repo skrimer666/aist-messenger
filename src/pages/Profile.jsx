@@ -1,26 +1,21 @@
-import QRCode from 'qrcode.react';
-import { useEffect, useState } from 'react';
-
-export default function Profile() {
-  const [userId, setUserId] = useState('');
-
-  useEffect(() => {
-    setUserId(localStorage.getItem('userId') || '');
-  }, []);
-
-  return (
-    <div style={{ padding: 20, textAlign: 'center' }}>
-      <h1>Мой профиль</h1>
-      {userId ? (
-        <>
-          <p>ID: {userId}</p>
-          <QRCode value={`aist://user/${userId}`} size={200} />
-        </>
-      ) : (
-        <p>
-          Не авторизован. <a href="/">Войти</a>
-        </p>
-      )}
-    </div>
-  );
+{
+  "name": "AIST Messenger",
+  "short_name": "AIST",
+  "description": "Безопасный мессенджер для России",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e88e5",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
