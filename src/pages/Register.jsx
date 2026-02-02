@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 export default function Register() {
-  const [view, setView] = useState('main'); // 'main', 'telegram', 'code', 'qr'
+  const [view, setView] = useState('main'); // main, telegram, code, qr
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
@@ -35,17 +35,19 @@ export default function Register() {
       const res = await fetch('/api/auth/verify-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: phone.replace(/\D/g, ''), code }),
+        body: JSON.stringify({ phone: cleanPhone, code }),
       });
 
       if (!res.ok) throw new Error('Неверный код');
-      const data = await res.json();
-      sessionStorage.setItem('aist_session', JSON.stringify(data));
-      window.location.href = '/chat';
+      const { loginHash, publicKey } = await res.json();
+      sessionStorage.setItem('aist_session', JSON.stringify({ loginHash, publicKey }));
+      window.location.href = '/profile'; // или /chat позже
     } catch (err) {
       setError(err.message);
     }
   };
+
+  const cleanPhone = phone.replace(/\D/g, '');
 
   return (
     <div style={{
