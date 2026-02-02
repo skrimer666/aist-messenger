@@ -1,73 +1,168 @@
-// /src/pages/Register.jsx
+// src/pages/Register.jsx
+import { useState } from 'react';
+
 export default function Register() {
-  const bgSvg = encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-      <defs>
-        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#0d47a1;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#1e88e5;stop-opacity:0.95" />
-        </linearGradient>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#grad)" />
-      <path d="M0,300 Q200,400 400,300 T800,300 L800,600 L0,600 Z" fill="rgba(255,255,255,0.06)"/>
-      <path d="M0,200 Q300,100 600,200 T1200,200 L1200,0 L0,0 Z" fill="rgba(255,255,255,0.04)"/>
-    </svg>
-  `).replace(/'/g, '%27');
+  const [view, setView] = useState('main'); // 'main', 'telegram', 'qr'
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState('');
+  const [error, setError] = useState('');
+
+  const handleTelegramSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const res = await fetch('/api/auth/request-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone }),
+      });
+      if (!res.ok) throw new Error('Не удалось отправить код');
+      setView('code');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: `url("data:image/svg+xml,${bgSvg}")`,
-        backgroundSize: 'cover',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#fff',
-        fontFamily: 'system-ui, sans-serif',
-        padding: '1rem',
-        margin: 0,
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.45)',
-          backdropFilter: 'blur(6px)',
-          borderRadius: '16px',
-          padding: '2rem',
-          width: '100%',
-          maxWidth: '400px',
-          textAlign: 'center',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-        }}
-      >
-        <h1 style={{ margin: '0 0 1rem', fontSize: '1.8rem' }}>AIST Messenger</h1>
-        <p style={{ opacity: 0.9, marginBottom: '1.5rem' }}>Ваши сообщения — только у вас</p>
-        <button
-          onClick={() => {
-            // Временная заглушка: генерируем ID и сохраняем
-            const mockId = 'USR-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-            localStorage.setItem('userId', mockId);
-            window.location.href = '/profile';
-          }}
-          style={{
-            width: '100%',
-            padding: '0.85rem',
-            backgroundColor: '#1e88e5',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '1rem',
-            fontWeight: '600',
-            cursor: 'pointer',
-          }}
-        >
-          Войти как гость (демо)
-        </button>
-        <p style={{ fontSize: '0.85rem', marginTop: '1.2rem', opacity: 0.8 }}>
-          В продакшене здесь будет полноценная аутентификация с E2E-шифрованием.
-        </p>
-      </div>
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #0d47a1, #1e88e5)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      color: '#fff',
+      fontFamily: 'system-ui, sans-serif',
+      padding: '1rem',
+      textAlign: 'center',
+    }}>
+      <h1 style={{ fontSize: '2.2rem', marginBottom: '2rem' }}>AIST Messenger</h1>
+
+      {view === 'main' && (
+        <div style={{ width: '100%', maxWidth: '360px' }}>
+          <p style={{ opacity: 0.9, marginBottom: '2rem' }}>
+            Безопасный вход для пользователей РФ
+          </p>
+
+          <button
+            onClick={() => setView('telegram')}
+            style={{
+              display: 'block',
+              width: '100%',
+              padding: '1rem',
+              backgroundColor: '#4fc3f7',
+              color: '#000',
+              border: 'none',
+              borderRadius: '12px',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              marginBottom: '1rem',
+            }}
+          >
+            🔹 Получить код через Telegram
+          </button>
+
+          <button
+            onClick={() => setView('qr')}
+            style={{
+              display: 'block',
+              width: '100%',
+              padding: '1rem',
+              backgroundColor: 'rgba(255,255,255,0.2)',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.3)',
+              borderRadius: '12px',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+            }}
+          >
+            📷 У меня есть QR-код
+          </button>
+        </div>
+      )}
+
+      {view === 'telegram' && (
+        <form onSubmit={handleTelegramSubmit} style={{ width: '100%', maxWidth: '320px' }}>
+          <input
+            type="tel"
+            placeholder="+7 (999) 123-45-67"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+            style={{
+              width: '100%',
+              padding: '0.8rem',
+              borderRadius: '8px',
+              border: '1px solid rgba(255,255,255,0.3)',
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              color: 'white',
+              fontSize: '1rem',
+            }}
+          />
+          {error && <p style={{ color: '#ff9999', marginTop: '0.5rem' }}>{error}</p>}
+          <button
+            type="submit"
+            style={{
+              marginTop: '1rem',
+              width: '100%',
+              padding: '0.8rem',
+              backgroundColor: '#1e88e5',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '1rem',
+            }}
+          >
+            Отправить код
+          </button>
+          <button
+            type="button"
+            onClick={() => setView('main')}
+            style={{
+              marginTop: '1rem',
+              color: 'rgba(255,255,255,0.8)',
+              background: 'none',
+              border: 'none',
+              fontSize: '0.9rem',
+            }}
+          >
+            ← Назад
+          </button>
+        </form>
+      )}
+
+      {view === 'qr' && (
+        <div style={{ width: '100%', maxWidth: '320px' }}>
+          <p>Наведите камеру на QR-код с другого устройства.</p>
+          <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '1rem' }}>
+            Код действует 1 минуту
+          </p>
+          <button
+            onClick={() => alert('В демо-режиме: откройте камеру и отсканируйте QR')}
+            style={{
+              marginTop: '1.5rem',
+              width: '100%',
+              padding: '0.8rem',
+              backgroundColor: '#1e88e5',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+            }}
+          >
+            Сканировать QR
+          </button>
+          <button
+            onClick={() => setView('main')}
+            style={{
+              marginTop: '1rem',
+              color: 'rgba(255,255,255,0.8)',
+              background: 'none',
+              border: 'none',
+            }}
+          >
+            ← Назад
+          </button>
+        </div>
+      )}
     </div>
   );
 }
