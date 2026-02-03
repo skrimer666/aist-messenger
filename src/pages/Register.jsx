@@ -1,26 +1,11 @@
 // src/pages/Register.jsx
 import { useState } from 'react';
 
-// Встроенный SVG-логотип аиста
 const StorkLogo = () => (
-  <svg
-    width="80"
-    height="80"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ marginBottom: '1rem' }}
-  >
-    {/* Тело */}
-    <path
-      d="M12 4C8 4 5 7 5 11c0 2 1 4 3 5-3 1-5 3-5 6 0 2 2 3 4 3s4-1 5-3c1 2 3 3 5 3s4-1 4-3c0-3-2-5-5-6 1-2 2-4 2-6 0-4-3-7-7-7z"
-      stroke="white"
-      strokeWidth="1.2"
-    />
-    {/* Глаз */}
-    <circle cx="12" cy="10" r="1" fill="white" />
-    {/* Клюв */}
-    <path d="M15 9.5l1.5 -0.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+  <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginBottom: '1rem' }}>
+    <path d="M12 4C8 4 5 7 5 11c0 2 1 4 3 5-3 1-5 3-5 6 0 2 2 3 4 3s4-1 5-3c1 2 3 3 5 3s4-1 4-3c0-3-2-5-5-6 1-2 2-4 2-6 0-4-3-7-7-7z" stroke="white" strokeWidth="1.2"/>
+    <circle cx="12" cy="10" r="1" fill="white"/>
+    <path d="M15 9.5l1.5 -0.5" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
   </svg>
 );
 
@@ -30,6 +15,11 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const clean = phone.replace(/\D/g, '');
+    if (clean.length < 10 || clean.length > 11) {
+      setError('Введите номер +7 XXX XXX-XX-XX');
+      return;
+    }
     alert('Код отправлен в Telegram');
   };
 
@@ -45,11 +35,24 @@ export default function Register() {
       fontFamily: 'system-ui, sans-serif',
       padding: '1rem',
     }}>
-      {/* 👇 SVG-логотип вместо <img> */}
       <StorkLogo />
-
       <h1>AIST Мессенджер</h1>
-      <p>Безопасный вход для пользователей РФ</p>
+      
+      {/* УТП под РФ */}
+      <div style={{
+        marginTop: '1.5rem',
+        padding: '12px',
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        borderRadius: '10px',
+        fontSize: '0.9rem',
+        lineHeight: 1.5,
+        maxWidth: '360px',
+        textAlign: 'center',
+      }}>
+        🔒 Соответствует ФЗ-152<br/>
+        📱 Данные — только на вашем устройстве<br/>
+        🇷🇺 Серверы — на территории РФ
+      </div>
 
       <form onSubmit={handleSubmit} style={{ marginTop: '2rem', width: '100%', maxWidth: '320px' }}>
         <input
@@ -67,6 +70,7 @@ export default function Register() {
             fontSize: '1rem',
           }}
         />
+        {error && <p style={{ color: '#ff9999', marginTop: '0.5rem' }}>{error}</p>}
         <button
           type="submit"
           style={{
