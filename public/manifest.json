@@ -2,6 +2,7 @@
   "name": "AIST Messenger",
   "short_name": "AIST",
   "description": "Безопасный мессенджер для России",
+  Here's the corrected version without trailing spaces:
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
