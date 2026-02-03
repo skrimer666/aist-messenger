@@ -1,30 +1,6 @@
 // src/pages/Register.jsx
 import { useState } from 'react';
 
-// SVG-иконка аиста (встроена, безопасна, оффлайн)
-const StorkIcon = () => (
-  <svg
-    width="80"
-    height="80"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ marginBottom: '1rem' }}
-  >
-    {/* Тело аиста */}
-    <path
-      d="M12 4C8 4 5 7 5 11c0 2 1 4 3 5-3 1-5 3-5 6 0 2 2 3 4 3s4-1 5-3c1 2 3 3 5 3s4-1 4-3c0-3-2-5-5-6 1-2 2-4 2-6 0-4-3-7-7-7z"
-      stroke="white"
-      strokeWidth="1.2"
-      fill="none"
-    />
-    {/* Глаз */}
-    <circle cx="12" cy="10" r="1" fill="white" />
-    {/* Клюв */}
-    <path d="M15 9l2-1 1 1-2 1z" fill="white" />
-  </svg>
-);
-
 export default function Register() {
   const [view, setView] = useState('main');
 
@@ -38,13 +14,22 @@ export default function Register() {
         justifyContent: 'center',
         alignItems: 'center',
         color: '#fff',
-        fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         padding: '1rem',
         textAlign: 'center',
       }}
     >
-      {/* Иконка аиста */}
-      <StorkIcon />
+      {/* Иконка аиста из /public/icon-192.png */}
+      <img
+        src="/icon-192.png"
+        alt="AIST"
+        style={{
+          width: '80px',
+          height: '80px',
+          marginBottom: '1.2rem',
+          imageRendering: 'pixelated', // сохраняет чёткость при масштабировании
+        }}
+      />
 
       <h1 style={{ fontSize: '2.2rem', fontWeight: '700', marginBottom: '1.5rem' }}>
         AIST Мессенджер
