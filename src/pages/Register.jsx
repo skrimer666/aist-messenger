@@ -7,7 +7,6 @@ export default function Register() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
-  // Запрос кода через Telegram
   const handleRequestCode = async (e) => {
     e.preventDefault();
     const clean = phone.replace(/\D/g, '');
@@ -30,21 +29,16 @@ export default function Register() {
     }
   };
 
-  // Проверка кода
   const handleVerifyCode = async (e) => {
     e.preventDefault();
     try {
       const res = await fetch('/api/auth/verify-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          phone: phone.replace(/\D/g, ''), 
-          code 
-        }),
+        body: JSON.stringify({ phone: cleanPhone, code }),
       });
 
       if (!res.ok) throw new Error('Неверный код');
-      
       const { loginHash, publicKey } = await res.json();
       sessionStorage.setItem('aist_session', JSON.stringify({ loginHash, publicKey }));
       window.location.href = '/chat';
@@ -53,21 +47,21 @@ export default function Register() {
     }
   };
 
+  const cleanPhone = phone.replace(/\D/g, '');
+
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0d47a1, #1e88e5)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#fff',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-        padding: '1rem',
-        textAlign: 'center',
-      }}
-    >
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #0d47a1, #1e88e5)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      color: '#fff',
+      fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+      padding: '1rem',
+      textAlign: 'center',
+    }}>
       {/* Иконка аиста */}
       <img
         src="/icon-192.png"
@@ -87,19 +81,16 @@ export default function Register() {
 
       {/* УТП */}
       {view === 'main' && (
-        <div
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.25)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            borderRadius: '16px',
-            padding: '1.2rem',
-            maxWidth: '400px',
-            marginBottom: '2rem',
-            fontSize: '0.95rem',
-            lineHeight: 1.5,
-          }}
-        >
+        <div style={{
+          backgroundColor: 'rgba(0,0,0,0.25)',
+          backdropFilter: 'blur(8px)',
+          borderRadius: '16px',
+          padding: '1.2rem',
+          maxWidth: '400px',
+          marginBottom: '2rem',
+          fontSize: '0.95rem',
+          lineHeight: 1.5,
+        }}>
           <p>🔒 Сквозное шифрование</p>
           <p>🇷🇺 Для пользователей РФ</p>
           <p>📱 Данные — только на вашем устройстве</p>
@@ -107,7 +98,7 @@ export default function Register() {
         </div>
       )}
 
-      {/* Основной выбор */}
+      {/* Кнопки входа */}
       {view === 'main' && (
         <div style={{ width: '100%', maxWidth: '360px' }}>
           <button
@@ -124,38 +115,31 @@ export default function Register() {
               fontSize: '1.15rem',
               marginBottom: '1.2rem',
               cursor: 'pointer',
-              transition: 'transform 0.1s',
             }}
-            onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
-            onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
           >
             🔹 Получить код через Telegram
           </button>
-
           <button
             onClick={() => setView('qr')}
             style={{
               display: 'block',
               width: '100%',
               padding: '1.1rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              backgroundColor: 'rgba(255,255,255,0.15)',
               color: '#fff',
               fontWeight: '700',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
+              border: '1px solid rgba(255,255,255,0.3)',
               borderRadius: '16px',
               fontSize: '1.15rem',
               cursor: 'pointer',
-              transition: 'transform 0.1s',
             }}
-            onMouseDown={(e) => e.target.style.transform = 'scale(0.98)'}
-            onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
           >
             📷 У меня есть QR-код
           </button>
         </div>
       )}
 
-      {/* Ввод телефона */}
+      {/* Форма телефона */}
       {view === 'telegram' && (
         <form onSubmit={handleRequestCode} style={{ width: '100%', maxWidth: '320px' }}>
           <input
@@ -174,39 +158,16 @@ export default function Register() {
             }}
           />
           {error && <p style={{ color: '#ff9999', marginTop: '0.6rem' }}>{error}</p>}
-          <button
-            type="submit"
-            style={{
-              marginTop: '1.2rem',
-              width: '100%',
-              padding: '0.9rem',
-              backgroundColor: '#1e88e5',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontSize: '1rem',
-              fontWeight: '600',
-            }}
-          >
+          <button type="submit" style={{ marginTop: '1.2rem', width: '100%', padding: '0.9rem', backgroundColor: '#1e88e5', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600' }}>
             Отправить код
           </button>
-          <button
-            type="button"
-            onClick={() => setView('main')}
-            style={{
-              marginTop: '1rem',
-              color: 'rgba(255,255,255,0.8)',
-              background: 'none',
-              border: 'none',
-              fontSize: '0.95rem',
-            }}
-          >
+          <button type="button" onClick={() => setView('main')} style={{ marginTop: '1rem', color: 'rgba(255,255,255,0.8)', background: 'none', border: 'none', fontSize: '0.95rem' }}>
             ← Назад
           </button>
         </form>
       )}
 
-      {/* Ввод кода */}
+      {/* Форма кода */}
       {view === 'code' && (
         <form onSubmit={handleVerifyCode} style={{ width: '100%', maxWidth: '320px' }}>
           <p>Код из Telegram</p>
@@ -228,33 +189,10 @@ export default function Register() {
             }}
           />
           {error && <p style={{ color: '#ff9999', marginTop: '0.6rem' }}>{error}</p>}
-          <button
-            type="submit"
-            style={{
-              marginTop: '1.2rem',
-              width: '100%',
-              padding: '0.9rem',
-              backgroundColor: '#1e88e5',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontSize: '1rem',
-              fontWeight: '600',
-            }}
-          >
+          <button type="submit" style={{ marginTop: '1.2rem', width: '100%', padding: '0.9rem', backgroundColor: '#1e88e5', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600' }}>
             Подтвердить
           </button>
-          <button
-            type="button"
-            onClick={() => setView('telegram')}
-            style={{
-              marginTop: '1rem',
-              color: 'rgba(255,255,255,0.8)',
-              background: 'none',
-              border: 'none',
-              fontSize: '0.95rem',
-            }}
-          >
+          <button type="button" onClick={() => setView('telegram')} style={{ marginTop: '1rem', color: 'rgba(255,255,255,0.8)', background: 'none', border: 'none', fontSize: '0.95rem' }}>
             ← Изменить номер
           </button>
         </form>
@@ -264,34 +202,16 @@ export default function Register() {
       {view === 'qr' && (
         <div style={{ width: '100%', maxWidth: '320px' }}>
           <p>Откройте камеру и наведите на QR-код с другого устройства.</p>
-          <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '1rem' }}>
-            Код действует 1 минуту
-          </p>
+          <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '1rem' }}>Код действует 1 минуту</p>
           <button
             onClick={() => alert('В демо: используйте камеру для сканирования QR')}
-            style={{
-              marginTop: '1.5rem',
-              width: '100%',
-              padding: '0.9rem',
-              backgroundColor: '#1e88e5',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontSize: '1rem',
-              fontWeight: '600',
-            }}
+            style={{ marginTop: '1.5rem', width: '100%', padding: '0.9rem', backgroundColor: '#1e88e5', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600' }}
           >
             Сканировать QR
           </button>
           <button
             onClick={() => setView('main')}
-            style={{
-              marginTop: '1rem',
-              color: 'rgba(255,255,255,0.8)',
-              background: 'none',
-              border: 'none',
-              fontSize: '0.95rem',
-            }}
+            style={{ marginTop: '1rem', color: 'rgba(255,255,255,0.8)', background: 'none', border: 'none', fontSize: '0.95rem' }}
           >
             ← Назад
           </button>
