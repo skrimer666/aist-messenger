@@ -7,26 +7,18 @@ export default function Register() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
-  // Новый SVG-фон: тёмно-синий + пурпурный градиент + абстрактные линии
+  // Встроенный SVG-фон с волнами
   const bgSvg = encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
       <defs>
         <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#1a237e" />
-          <stop offset="100%" stop-color="#4a148c" />
+          <stop offset="0%" stop-color="#0d47a1" />
+          <stop offset="100%" stop-color="#1e88e5" />
         </linearGradient>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-          <feMerge> 
-            <feMergeNode in="coloredBlur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
       </defs>
       <rect width="100%" height="100%" fill="url(#grad)" />
-      <path d="M0,400 Q300,500 600,400 T1200,400 L1200,800 L0,800 Z" fill="rgba(123, 31, 162, 0.1)"/>
-      <circle cx="20%" cy="30%" r="80" fill="rgba(255,255,255,0.05)" filter="url(#glow)"/>
-      <circle cx="80%" cy="70%" r="120" fill="rgba(255,255,255,0.03)" filter="url(#glow)"/>
+      <path d="M0,300 Q200,400 400,300 T800,300 L800,600 L0,600 Z" fill="rgba(255,255,255,0.08)"/>
+      <path d="M0,200 Q300,100 600,200 T1200,200 L1200,0 L0,0 Z" fill="rgba(255,255,255,0.06)"/>
     </svg>
   `).replace(/'/g, '%27');
 
@@ -101,7 +93,7 @@ export default function Register() {
             height: '100px',
             marginBottom: '1.4rem',
             borderRadius: '20px',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.35)',
             opacity: 0,
             animation: 'fadeInLogo 0.8s forwards 0.2s',
           }}
@@ -113,7 +105,7 @@ export default function Register() {
         <div style={{
           width: '60px',
           height: '3px',
-          backgroundColor: '#ba68c8',
+          backgroundColor: '#4fc3f7',
           margin: '0 auto 1.2rem',
           borderRadius: '3px',
         }} />
@@ -121,19 +113,18 @@ export default function Register() {
         {/* УТП */}
         {view === 'main' && (
           <div style={{
-            backgroundColor: 'rgba(0,0,0,0.2)',
-            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(0,0,0,0.15)',
+            backdropFilter: 'blur(8px)',
             borderRadius: '16px',
             padding: '1.2rem',
             maxWidth: '400px',
             marginBottom: '2rem',
             fontSize: '0.95rem',
             lineHeight: 1.5,
-            border: '1px solid rgba(255,255,255,0.1)',
           }}>
             <p>🔒 Сквозное шифрование</p>
             <p>🇷🇺 Соответствует требованиям 152-ФЗ</p>
-            <p>📱 Ваши данные — только у вас</p>
+            <p>📱 Данные не покидают территорию РФ</p>
           </div>
         )}
 
@@ -142,21 +133,20 @@ export default function Register() {
           <div style={{ width: '100%', maxWidth: '360px' }}>
             <button
               onClick={() => setView('telegram')}
-              onMouseEnter={(e) => e.target.style.backgroundColor = '#9c27b0'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = '#7b1fa2'}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#29b6f6'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#4fc3f7'}
               style={{
                 display: 'block',
                 width: '100%',
                 padding: '1.1rem',
-                backgroundColor: '#7b1fa2',
-                color: '#fff',
+                backgroundColor: '#4fc3f7',
+                color: '#000',
                 fontWeight: '700',
                 border: 'none',
                 borderRadius: '16px',
                 fontSize: '1.15rem',
                 marginBottom: '1.2rem',
                 cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(123, 31, 162, 0.3)',
               }}
             >
               🔹 Получить код через Telegram
@@ -202,7 +192,7 @@ export default function Register() {
               }}
             />
             {error && <p style={{ color: '#ff9999', marginTop: '0.6rem' }}>{error}</p>}
-            <button type="submit" style={{ marginTop: '1.2rem', width: '100%', padding: '0.9rem', backgroundColor: '#7b1fa2', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600', boxShadow: '0 4px 12px rgba(123, 31, 162, 0.3)' }}>
+            <button type="submit" style={{ marginTop: '1.2rem', width: '100%', padding: '0.9rem', backgroundColor: '#1e88e5', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600' }}>
               Отправить код
             </button>
             <button type="button" onClick={() => setView('main')} style={{ marginTop: '1rem', color: 'rgba(255,255,255,0.8)', background: 'none', border: 'none', fontSize: '0.95rem' }}>
@@ -232,7 +222,7 @@ export default function Register() {
               }}
             />
             {error && <p style={{ color: '#ff9999', marginTop: '0.6rem' }}>{error}</p>}
-            <button type="submit" style={{ marginTop: '1.2rem', width: '100%', padding: '0.9rem', backgroundColor: '#7b1fa2', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600', boxShadow: '0 4px 12px rgba(123, 31, 162, 0.3)' }}>
+            <button type="submit" style={{ marginTop: '1.2rem', width: '100%', padding: '0.9rem', backgroundColor: '#1e88e5', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600' }}>
               Подтвердить
             </button>
             <button type="button" onClick={() => setView('telegram')} style={{ marginTop: '1rem', color: 'rgba(255,255,255,0.8)', background: 'none', border: 'none', fontSize: '0.95rem' }}>
@@ -247,7 +237,7 @@ export default function Register() {
             <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '1rem' }}>Код действует 1 минуту</p>
             <button
               onClick={() => alert('Используйте камеру для сканирования QR')}
-              style={{ marginTop: '1.5rem', width: '100%', padding: '0.9rem', backgroundColor: '#7b1fa2', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600', boxShadow: '0 4px 12px rgba(123, 31, 162, 0.3)' }}
+              style={{ marginTop: '1.5rem', width: '100%', padding: '0.9rem', backgroundColor: '#1e88e5', color: 'white', border: 'none', borderRadius: '12px', fontSize: '1rem', fontWeight: '600' }}
             >
               Сканировать QR
             </button>
