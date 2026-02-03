@@ -7,13 +7,14 @@ export default function Register() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
-  // Встроенный SVG-фон с волнами
+  // Классический синий градиент + волны
   const bgSvg = encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
       <defs>
         <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#0d47a1" />
-          <stop offset="100%" stop-color="#1e88e5" />
+          <stop offset="50%" stop-color="#1e88e5" />
+          <stop offset="100%" stop-color="#4fc3f7" />
         </linearGradient>
       </defs>
       <rect width="100%" height="100%" fill="url(#grad)" />
@@ -89,31 +90,24 @@ export default function Register() {
           src="/icon-192.png"
           alt="AIST"
           style={{
-            width: '100px',
-            height: '100px',
-            marginBottom: '1.4rem',
-            borderRadius: '20px',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.35)',
+            width: '96px',
+            height: '96px',
+            marginBottom: '1.2rem',
+            borderRadius: '16px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
             opacity: 0,
             animation: 'fadeInLogo 0.8s forwards 0.2s',
           }}
         />
 
-        <h1 style={{ fontSize: '2.4rem', fontWeight: '800', marginBottom: '0.4rem' }}>
+        <h1 style={{ fontSize: '2.4rem', fontWeight: '800', marginBottom: '0.8rem' }}>
           AIST Мессенджер
         </h1>
-        <div style={{
-          width: '60px',
-          height: '3px',
-          backgroundColor: '#4fc3f7',
-          margin: '0 auto 1.2rem',
-          borderRadius: '3px',
-        }} />
 
         {/* УТП */}
         {view === 'main' && (
           <div style={{
-            backgroundColor: 'rgba(0,0,0,0.15)',
+            backgroundColor: 'rgba(0,0,0,0.25)',
             backdropFilter: 'blur(8px)',
             borderRadius: '16px',
             padding: '1.2rem',
@@ -123,8 +117,8 @@ export default function Register() {
             lineHeight: 1.5,
           }}>
             <p>🔒 Сквозное шифрование</p>
-            <p>🇷🇺 Соответствует требованиям 152-ФЗ</p>
-            <p>📱 Данные не покидают территорию РФ</p>
+            <p>🇷🇺 Для пользователей РФ</p>
+            <p>📱 Данные — только на вашем устройстве</p>
           </div>
         )}
 
@@ -133,8 +127,6 @@ export default function Register() {
           <div style={{ width: '100%', maxWidth: '360px' }}>
             <button
               onClick={() => setView('telegram')}
-              onMouseEnter={(e) => e.target.style.backgroundColor = '#29b6f6'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = '#4fc3f7'}
               style={{
                 display: 'block',
                 width: '100%',
@@ -153,8 +145,6 @@ export default function Register() {
             </button>
             <button
               onClick={() => setView('qr')}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.25)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.15)'}
               style={{
                 display: 'block',
                 width: '100%',
@@ -247,20 +237,6 @@ export default function Register() {
             >
               ← Назад
             </button>
-          </div>
-        )}
-
-        {/* Информация о безопасности */}
-        {view === 'main' && (
-          <div style={{
-            marginTop: '1.5rem',
-            fontSize: '0.85rem',
-            opacity: 0.85,
-            maxWidth: '360px',
-            lineHeight: 1.4,
-          }}>
-            🔒 Все сообщения шифруются на вашем устройстве.<br/>
-            📱 Серверы расположены в Российской Федерации.
           </div>
         )}
       </div>
