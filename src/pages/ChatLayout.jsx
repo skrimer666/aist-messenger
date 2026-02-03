@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 
 export default function ChatLayout() {
+  // Мок-данные (в продакшене — из зашифрованного хранилища)
   const [chats, setChats] = useState([
     { id: '1', name: 'Алексей Иванов', lastMsg: 'Привет! Как дела?', time: '10:45', unread: 2, online: true },
     { id: '2', name: 'Команда AIST', lastMsg: 'Обновление безопасности...', time: 'Вчера', unread: 0, online: false },
@@ -48,7 +49,7 @@ export default function ChatLayout() {
         <div style={{
           padding: '16px 20px',
           borderBottom: '1px solid #e0e0e0',
-          fontWeight: '600',
+          fontWeight: '700',
           fontSize: '18px',
           color: '#1e88e5',
         }}>
@@ -77,6 +78,7 @@ export default function ChatLayout() {
                 alignItems: 'center',
                 color: 'white',
                 fontWeight: 'bold',
+                fontSize: '18px',
               }}>
                 {chat.name.charAt(0).toUpperCase()}
               </div>
@@ -160,7 +162,7 @@ export default function ChatLayout() {
                   style={{
                     alignSelf: msg.sender === 'me' ? 'flex-end' : 'flex-start',
                     maxWidth: '70%',
-                    padding: '8px 12px',
+                    padding: '10px 14px',
                     borderRadius: '18px',
                     backgroundColor: msg.sender === 'me' ? '#1e88e5' : '#ffffff',
                     color: msg.sender === 'me' ? '#fff' : '#000',
@@ -198,6 +200,7 @@ export default function ChatLayout() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                fontSize: '18px',
               }}>
                 📎
               </button>
@@ -227,6 +230,7 @@ export default function ChatLayout() {
                   border: 'none',
                   cursor: newMessage.trim() ? 'pointer' : 'default',
                   fontWeight: 'bold',
+                  fontSize: '16px',
                 }}
               >
                 ↵
@@ -264,7 +268,7 @@ export default function ChatLayout() {
                 alignItems: 'center',
                 color: 'white',
                 fontWeight: 'bold',
-                fontSize: '24px',
+                fontSize: '28px',
               }}>
                 {selectedChat.name.charAt(0).toUpperCase()}
               </div>
