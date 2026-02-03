@@ -39,7 +39,13 @@ export default function Register() {
       fontFamily: 'system-ui, sans-serif',
       padding: '1rem',
     }}>
-      <img src="/icon-192.png" alt="AIST" style={{ width: '80px', height: '80px', marginBottom: '1rem' }} />
+      {/* Иконка аиста */}
+      <img 
+        src="/icon-192.png" 
+        alt="AIST" 
+        style={{ width: '80px', height: '80px', marginBottom: '1rem' }} 
+      />
+      
       <h1>AIST Мессенджер</h1>
       <p>Безопасный вход для пользователей РФ</p>
 
@@ -75,6 +81,24 @@ export default function Register() {
           }}
         >
           Получить код через Telegram
+        </button>
+        
+        <button
+          type="button"
+          onClick={() => alert('QR-вход (в разработке)')}
+          style={{
+            marginTop: '1rem',
+            width: '100%',
+            padding: '0.8rem',
+            backgroundColor: 'rgba(255,255,255,0.15)',
+            color: 'white',
+            border: '1px solid rgba(255,255,255,0.3)',
+            borderRadius: '8px',
+            fontSize: '1rem',
+            fontWeight: '600',
+          }}
+        >
+          У меня есть QR-код
         </button>
       </form>
     </div>
