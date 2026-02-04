@@ -1,12 +1,11 @@
 // src/pages/Register.jsx
 import { useState } from 'react';
 
-const API_BASE = process.env.NODE_ENV === 'production'
-  ? 'https://api.get-aist.ru'
-  : '';
+// Всегда используем полный URL — работает и локально, и на Vercel
+const API_BASE = 'https://api.get-aist.ru';
 
 export default function Register() {
-  const [step, setStep] = useState('phone'); // 'phone', 'code'
+  const [step, setStep] = useState('phone'); // 'phone' или 'code'
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
@@ -15,8 +14,8 @@ export default function Register() {
   const handleRequestCode = async (e) => {
     e.preventDefault();
     const clean = phone.replace(/\D/g, '');
-    if (clean.length < 10 || clean.length > 11) {
-      setError('Введите номер +7 XXX XXX-XX-XX');
+    if (clean.length !== 10 && clean.length !== 11) {
+      setError('Введите номер: +7 XXX XXX-XX-XX');
       return;
     }
 
@@ -27,7 +26,7 @@ export default function Register() {
       const res = await fetch(`${API_BASE}/api/auth/request-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: `+7${clean}` }),
+        body: JSON.stringify({ phone: `+7${clean.slice(-10)}` }),
       });
 
       if (!res.ok) throw new Error('Не удалось отправить код');
@@ -38,7 +37,7 @@ export default function Register() {
         throw new Error('Неподдерживаемый метод');
       }
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Ошибка сети');
     } finally {
       setLoading(false);
     }
@@ -46,24 +45,32 @@ export default function Register() {
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
+    if (code.length !== 6) {
+      setError('Код должен содержать 6 цифр');
+      return;
+    }
+
     try {
       setLoading(true);
       setError('');
 
+      const cleanPhone = phone.replace(/\D/g, '');
       const res = await fetch(`${API_BASE}/api/auth/verify-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: `+7${phone.replace(/\D/g, '')}`, code }),
+        body: JSON.stringify({
+          phone: `+7${cleanPhone.slice(-10)}`,
+          code: code,
+        }),
       });
 
       if (!res.ok) throw new Error('Неверный код');
 
-      // Успешная авторизация
       const session = await res.json();
       sessionStorage.setItem('aist_session', JSON.stringify(session));
       window.location.href = '/profile';
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Ошибка проверки кода');
     } finally {
       setLoading(false);
     }
@@ -78,19 +85,28 @@ export default function Register() {
       justifyContent: 'center',
       alignItems: 'center',
       color: '#fff',
-      fontFamily: 'system-ui, sans-serif',
+      fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
       padding: '1rem',
+      textAlign: 'center',
     }}>
-      <img 
-        src="/icon-192.png" 
-        alt="AIST" 
-        style={{ width: '80px', height: '80px', marginBottom: '1rem' }} 
+      <img
+        src="/icon-192.png"
+        alt="AIST"
+        style={{
+          width: '96px',
+          height: '96px',
+          marginBottom: '1.2rem',
+          borderRadius: '16px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
+        }}
       />
-      
-      <h1>AIST Мессенджер</h1>
+
+      <h1 style={{ fontSize: '2.2rem', fontWeight: '800', marginBottom: '0.5rem' }}>
+        AIST Мессенджер
+      </h1>
 
       {step === 'phone' && (
-        <form onSubmit={handleRequestCode} style={{ marginTop: '2rem', width: '100%', maxWidth: '320px' }}>
+        <form onSubmit={handleRequestCode} style={{ marginTop: '1.5rem', width: '100%', maxWidth: '320px' }}>
           <input
             type="tel"
             placeholder="+7 (999) 123-45-67"
@@ -98,26 +114,26 @@ export default function Register() {
             onChange={(e) => setPhone(e.target.value)}
             style={{
               width: '100%',
-              padding: '0.8rem',
-              borderRadius: '8px',
+              padding: '0.9rem',
+              borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.3)',
               backgroundColor: 'rgba(255,255,255,0.1)',
               color: 'white',
               fontSize: '1rem',
             }}
           />
-          {error && <p style={{ color: '#ff9999', marginTop: '0.5rem' }}>{error}</p>}
+          {error && <p style={{ color: '#ff9999', marginTop: '0.6rem', fontSize: '0.9rem' }}>{error}</p>}
           <button
             type="submit"
             disabled={loading}
             style={{
-              marginTop: '1rem',
+              marginTop: '1.2rem',
               width: '100%',
-              padding: '0.8rem',
+              padding: '0.9rem',
               backgroundColor: loading ? '#90caf9' : '#1e88e5',
               color: 'white',
               border: 'none',
-              borderRadius: '8px',
+              borderRadius: '12px',
               fontSize: '1rem',
               fontWeight: '600',
             }}
@@ -128,8 +144,8 @@ export default function Register() {
       )}
 
       {step === 'code' && (
-        <form onSubmit={handleVerifyCode} style={{ marginTop: '2rem', width: '100%', maxWidth: '320px' }}>
-          <p>Код из Telegram</p>
+        <form onSubmit={handleVerifyCode} style={{ marginTop: '1.5rem', width: '100%', maxWidth: '320px' }}>
+          <p>Введите код из Telegram</p>
           <input
             type="text"
             value={code}
@@ -137,28 +153,28 @@ export default function Register() {
             maxLength="6"
             style={{
               width: '100%',
-              padding: '0.8rem',
-              borderRadius: '8px',
+              padding: '0.9rem',
+              borderRadius: '12px',
               border: '1px solid rgba(255,255,255,0.3)',
               backgroundColor: 'rgba(255,255,255,0.1)',
               color: 'white',
-              fontSize: '1.2rem',
+              fontSize: '1.3rem',
               textAlign: 'center',
-              letterSpacing: '4px',
+              letterSpacing: '6px',
             }}
           />
-          {error && <p style={{ color: '#ff9999', marginTop: '0.5rem' }}>{error}</p>}
+          {error && <p style={{ color: '#ff9999', marginTop: '0.6rem', fontSize: '0.9rem' }}>{error}</p>}
           <button
             type="submit"
             disabled={loading || code.length !== 6}
             style={{
-              marginTop: '1rem',
+              marginTop: '1.2rem',
               width: '100%',
-              padding: '0.8rem',
+              padding: '0.9rem',
               backgroundColor: (loading || code.length !== 6) ? '#90caf9' : '#1e88e5',
               color: 'white',
               border: 'none',
-              borderRadius: '8px',
+              borderRadius: '12px',
               fontSize: '1rem',
               fontWeight: '600',
             }}
