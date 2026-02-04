@@ -1,10 +1,12 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
+
 module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://45.150.10.220:3001',
+      target: 'https://api.get-aist.ru',
       changeOrigin: true,
+      secure: true,
     })
   );
 };
