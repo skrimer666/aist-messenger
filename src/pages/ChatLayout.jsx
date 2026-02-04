@@ -1,16 +1,15 @@
 // src/pages/ChatLayout.jsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function ChatLayout() {
-  // Мок-данные (в продакшене — из зашифрованного хранилища)
-  const [chats, setChats] = useState([
+  const [chats] = useState([
     { id: '1', name: 'Алексей Иванов', lastMsg: 'Привет! Как дела?', time: '10:45', unread: 2, online: true },
     { id: '2', name: 'Команда AIST', lastMsg: 'Обновление безопасности...', time: 'Вчера', unread: 0, online: false },
     { id: '3', name: 'Техподдержка', lastMsg: 'Ваш запрос принят', time: 'Пн', unread: 0, online: false },
   ]);
 
   const [selectedChat, setSelectedChat] = useState(chats[0]);
-  const [messages, setMessages] = useState([
+  const [messages] = useState([
     { id: '1', text: 'Привет!', sender: 'me', time: '10:40', read: true },
     { id: '2', text: 'Привет! Как дела?', sender: 'them', time: '10:42', read: false },
     { id: '3', text: 'Хорошо, спасибо!', sender: 'me', time: '10:43', read: true },
@@ -19,16 +18,9 @@ export default function ChatLayout() {
 
   const handleSend = () => {
     if (!newMessage.trim()) return;
-    const msg = {
-      id: Date.now().toString(),
-      text: newMessage,
-      sender: 'me',
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      read: false,
-    };
-    setMessages([...messages, msg]);
-    setNewMessage('');
     // В реальности: отправить зашифрованное сообщение через /api
+    console.log('Отправка E2E-сообщения:', newMessage);
+    setNewMessage('');
   };
 
   return (
@@ -119,7 +111,7 @@ export default function ChatLayout() {
           <>
             <div style={{
               padding: '12px 16px',
-              borderBottom: '1px solid #e0e0e0',
+              borderBottom: '1px solid #e0e0e5',
               backgroundColor: '#ffffff',
               display: 'flex',
               alignItems: 'center',
@@ -185,7 +177,7 @@ export default function ChatLayout() {
 
             <div style={{
               padding: '12px',
-              borderTop: '1px solid #e0e0e0',
+              borderTop: '1px solid #e0e0e5',
               backgroundColor: '#ffffff',
               display: 'flex',
               gap: '8px',
@@ -214,7 +206,7 @@ export default function ChatLayout() {
                   flex: 1,
                   padding: '10px 16px',
                   borderRadius: '24px',
-                  border: '1px solid #e0e0e0',
+                  border: '1px solid #e0e0e5',
                   fontSize: '14px',
                 }}
               />
@@ -225,7 +217,7 @@ export default function ChatLayout() {
                   width: '40px',
                   height: '40px',
                   borderRadius: '50%',
-                  backgroundColor: newMessage.trim() ? '#1e88e5' : '#e0e0e0',
+                  backgroundColor: newMessage.trim() ? '#1e88e5' : '#e0e0e5',
                   color: 'white',
                   border: 'none',
                   cursor: newMessage.trim() ? 'pointer' : 'default',
@@ -248,7 +240,7 @@ export default function ChatLayout() {
       <div style={{
         width: '280px',
         backgroundColor: '#ffffff',
-        borderLeft: '1px solid #e0e0e0',
+        borderLeft: '1px solid #e0e0e5',
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
