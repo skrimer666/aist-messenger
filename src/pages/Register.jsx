@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ChatLayout from './ChatLayout'; // в той же папке
+import ChatLayout from './ChatLayout';
 
 const Register = () => {
   const [phone, setPhone] = useState('');
@@ -86,10 +86,8 @@ const Register = () => {
       const data = await response.json();
 
       if (response.ok && data.ok) {
-        // Сохраняем токен
         localStorage.setItem('authToken', data.token);
-        // Редирект на чат
-        navigate('/chat');
+         navigate('/chat');
       } else {
         setError(data.error || 'Неверный код');
       }
