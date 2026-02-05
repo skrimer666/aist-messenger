@@ -11,7 +11,7 @@ const Register = () => {
   const [method, setMethod] = useState('manual');
   const navigate = useNavigate();
 
-   useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
       navigate('/chat');
@@ -87,7 +87,7 @@ const Register = () => {
 
       if (response.ok && data.ok) {
         localStorage.setItem('authToken', data.token);
-         navigate('/chat');
+        navigate('/chat');
       } else {
         setError(data.error || 'Неверный код');
       }
