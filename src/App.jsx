@@ -1,7 +1,6 @@
-// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Register from './pages/Register'; // с заглавной буквы
+import Register from './pages/Register';
 import ChatLayout from './pages/ChatLayout';
 
 function App() {
