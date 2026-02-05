@@ -14,7 +14,6 @@ export default function Register() {
     }
 
     try {
-      // --- ВАЖНО ДЛЯ VERCCEL: отправляем запрос напрямую на бэкенд ---
       const res = await fetch('http://45.150.10.220:3001/api/auth/request-code', {
         method: 'POST',
         headers: {
@@ -22,7 +21,6 @@ export default function Register() {
         },
         body: JSON.stringify({ phone: `+${clean}` }),
       });
-      // --- КОНЕЦ ИСПРАВЛЕНИЯ ---
 
       if (!res.ok) {
         const data = await res.json();
