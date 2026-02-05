@@ -14,15 +14,13 @@ export default function Register() {
     }
 
     try {
-      // --- ИСПРАВЛЕНО: Прямой вызов API ---
-      const res = await fetch('https://api.get-aist.ru/api/auth/request-code', {
+      const res = await fetch('/api/auth/request-code', { // Использует прокси
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ phone: `+${clean}` }),
       });
-      // --- КОНЕЦ ИСПРАВЛЕНИЯ ---
 
       if (!res.ok) {
         const data = await res.json();
@@ -31,7 +29,7 @@ export default function Register() {
 
       alert('Код отправлен в Telegram');
     } catch (err) {
-      console.error("Ошибка запроса:", err); // Добавлено для отладки
+      console.error("Ошибка запроса:", err);
       setError(err.message || 'Ошибка сети. Проверьте соединение.');
     }
   };
@@ -49,6 +47,7 @@ export default function Register() {
       padding: '1rem',
       textAlign: 'center',
     }}>
+      {/* Иконка аиста над заголовком */}
       <img
         src="/icon-192.png"
         alt="AIST Logo"
