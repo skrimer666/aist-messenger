@@ -36,7 +36,7 @@ export default function Register() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0d47a1, #1e88e5),
+      background: 'linear-gradient(135deg, #0d47a1, #1e88e5)',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
