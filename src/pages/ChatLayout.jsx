@@ -1,4 +1,3 @@
-// src/pages/ChatLayout.jsx
 import { useState } from 'react';
 
 export default function ChatLayout() {
@@ -18,8 +17,7 @@ export default function ChatLayout() {
 
   const handleSend = () => {
     if (!newMessage.trim()) return;
-    // В реальности: отправить зашифрованное сообщение через /api
-    console.log('Отправка E2E-сообщения:', newMessage);
+      console.log('Отправка E2E-сообщения:', newMessage);
     setNewMessage('');
   };
 
