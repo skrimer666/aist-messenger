@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Register from './components/register';
-import ChatLayout from './components/ChatLayout';
+import Register from './pages/register';
+import ChatLayout from './pages/ChatLayout';
 
 function App() {
   return (
