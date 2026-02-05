@@ -7,21 +7,20 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const clean = phone.replace(/\D/g, ''); // Убираем всё, кроме цифр
+    const clean = phone.replace(/\D/g, '');
     if (clean.length !== 11 || !clean.startsWith('7')) {
       setError('Введите номер в формате +7 XXX XXX-XX-XX');
       return;
     }
 
     try {
-      // --- ВАЖНО ДЛЯ VERCCEL: отправляем запрос напрямую на бэкенд ---
-      // Прокси из setupProxy.js НЕ работает на Vercel!
+      // --- ОТПРАВКА НАПРЯМУЮ НА БЭКЕНД ДЛЯ VERCCEL ---
       const res = await fetch('http://45.150.10.220:3001/api/auth/request-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ phone: `+${clean}` }), // Отправляем в формате +7XXXXXXXXXX
+        body: JSON.stringify({ phone: `+${clean}` }),
       });
       // --- КОНЕЦ ИСПРАВЛЕНИЯ ---
 
@@ -32,7 +31,7 @@ export default function Register() {
 
       alert('Код отправлен в Telegram');
     } catch (err) {
-      console.error("Ошибка запроса:", err); // Добавлено для отладки на Vercel
+      console.error("Ошибка запроса:", err);
       setError(err.message || 'Ошибка сети. Проверьте соединение.');
     }
   };
@@ -51,7 +50,7 @@ export default function Register() {
       textAlign: 'center',
     }}>
       <img
-        src="/icon-192.png" // Убедитесь, что файл лежит в public/
+        src="/icon-192.png"
         alt="AIST Logo"
         style={{
           width: '80px',
