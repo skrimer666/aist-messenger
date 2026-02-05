@@ -1,7 +1,7 @@
 // aist-messenger/src/pages/register.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ChatLayout from '../pages/ChatLayout'; // предполагаем, что ChatLayout в components/
+import ChatLayout from './ChatLayout'; // тот же каталог: pages/
 
 const Register = () => {
   const [phone, setPhone] = useState('');
