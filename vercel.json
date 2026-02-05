@@ -1,5 +1,4 @@
 {
-  "rootDirectory": "aist-messenger",
   "builds": [
     {
       "src": "package.json",
