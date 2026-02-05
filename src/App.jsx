@@ -1,15 +1,15 @@
-// src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Register from './components/register';
+import ChatLayout from './components/ChatLayout';
 
-export default function App() {
+function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/chat" element={<ChatLayout />} />
         <Route path="/" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
