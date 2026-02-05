@@ -9,20 +9,24 @@ export default function Register() {
     e.preventDefault();
     const clean = phone.replace(/\D/g, '');
     if (clean.length !== 11 || !clean.startsWith('7')) {
-      setError('Введите номер +7 XXX XXX-XX-XX');
+      setError('Введите номер в формате +7 XXX XXX-XX-XX');
       return;
     }
 
     try {
-      // В dev-режиме: /api → проксируется на https://api.get-aist.ru
-      // В продакшене: /api → напрямую на https://api.get-aist.ru/api/...
       const res = await fetch('/api/auth/request-code', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ phone: `+${clean}` }),
       });
 
-      if (!res.ok) throw new Error('Не удалось отправить код');
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || 'Не удалось отправить код');
+      }
+
       alert('Код отправлен в Telegram');
     } catch (err) {
       setError(err.message);
@@ -42,6 +46,8 @@ export default function Register() {
       padding: '1rem',
     }}>
       <h1>AIST Мессенджер</h1>
+      <p>Безопасный вход для пользователей РФ</p>
+
       <form onSubmit={handleSubmit} style={{ marginTop: '2rem', width: '100%', maxWidth: '320px' }}>
         <input
           type="tel"
