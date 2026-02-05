@@ -7,7 +7,7 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const clean = phone.replace(/\D/g, ''); // Убираем всё, кроме цифр
+    const clean = phone.replace(/\D/g, '');
     if (clean.length !== 11 || !clean.startsWith('7')) {
       setError('Введите номер в формате +7 XXX XXX-XX-XX');
       return;
@@ -19,7 +19,7 @@ export default function Register() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ phone: `+${clean}` }), // Отправляем в формате +7XXXXXXXXXX
+        body: JSON.stringify({ phone: `+${clean}` }),
       });
 
       if (!res.ok) {
@@ -27,7 +27,6 @@ export default function Register() {
         throw new Error(data.message || 'Не удалось отправить код');
       }
 
-      // Здесь можно обработать успешную отправку, например, перейти к вводу кода
       alert('Код отправлен в Telegram');
     } catch (err) {
       setError(err.message);
@@ -49,7 +48,7 @@ export default function Register() {
     }}>
       {/* Иконка аиста над заголовком */}
       <img
-        src="/icon-192.png" // Убедитесь, что файл лежит в public/
+        src="/icon-192.png"
         alt="AIST Logo"
         style={{
           width: '80px',
