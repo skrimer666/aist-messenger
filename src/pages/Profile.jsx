@@ -10,7 +10,7 @@ export default function Profile() {
 
   return (
     <div style={{ padding: 20, textAlign: 'center' }}>
-      <h1>Мой профиль</h1>
+      <h1>Мой профиль</h1> {/* Исправлено: обернул "Мой профиль" в тег */}
       {userId ? (
         <>
           <p>ID: {userId}</p>
@@ -18,7 +18,7 @@ export default function Profile() {
         </>
       ) : (
         <p>
-          Не авторизован. <a href="/">Войти</a>
+          Не авторизован. <a href="/">Войти</a> {/* Исправлено: [Войти](/) на <a href="/">Войти</a> */}
         </p>
       )}
     </div>
