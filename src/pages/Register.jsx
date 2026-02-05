@@ -36,7 +36,7 @@ export default function Register() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0d47a1, #1e88e5)',
+      background: 'linear-gradient(135deg, #0d47a1, #1e88e5),
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
@@ -46,7 +46,6 @@ export default function Register() {
       padding: '1rem',
       textAlign: 'center',
     }}>
-      {/* Иконка аиста над заголовком */}
       <img
         src="/icon-192.png"
         alt="AIST Logo"

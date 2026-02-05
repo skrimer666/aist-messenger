@@ -1,12 +1,11 @@
-// src/setupProxy.js (убедитесь, что находится в папке src/)
-const { createProxyMiddleware } = require('http-proxy-middleware');
+// src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
-module.exports = function(app) {
-  app.use(
-    '/api',
-    createProxyMiddleware({
-      target: 'http://45.150.10.220:3001', // Или ваш актуальный бэкенд
-      changeOrigin: true,
-    })
-  );
-};
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
