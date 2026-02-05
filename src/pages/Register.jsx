@@ -1,174 +1,213 @@
+// src/components/register.jsx
 import React, { useState } from 'react';
 
-// Конфиг API
-const API_BASE_URL = 'https://api.get-aist.ru';
-
-export default function Register() {
-  // Состояния
-  const [step, setStep] = useState('phone'); // 'phone' | 'code'
+const Register = () => {
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
-  const [message, setMessage] = useState('');
+  const [step, setStep] = useState('phone'); // 'phone' | 'code' | 'success'
   const [loading, setLoading] = useState(false);
-  const [codeSentMethod, setCodeSentMethod] = useState(null); // 'telegram_sent' | 'manual'
+  const [error, setError] = useState('');
+  const [method, setMethod] = useState('manual'); // 'manual' | 'telegram_sent'
 
-  // Форматирование телефона в реальном времени
   const formatPhone = (value) => {
     const digits = value.replace(/\D/g, '');
-    
-    if (digits.startsWith('8') && digits.length >= 2) {
-      return '+7' + digits.substring(1, 11);
-    }
-    if (digits.startsWith('7') && digits.length >= 2) {
-      return '+' + digits.substring(0, 11);
-    }
-    if (digits.length <= 10) {
-      return '+7' + digits;
-    }
-    return '+' + digits.substring(0, 11);
+    if (digits.length === 0) return '';
+    if (digits[0] === '8') return '+7' + digits.slice(1);
+    if (digits[0] === '7' && digits.length === 11) return '+' + digits;
+    if (digits.length <= 10) return '+7' + digits;
+    return '+' + digits;
   };
 
   const handlePhoneChange = (e) => {
-    const formatted = formatPhone(e.target.value);
+    const input = e.target.value;
+    const formatted = formatPhone(input);
     setPhone(formatted);
+    setError('');
   };
 
-  // Запрос кода
-  const requestCode = async () => {
-    if (!phone || phone.length !== 12) { // +7XXXXXXXXXX = 12 chars
-      setMessage('Введите корректный номер +7 XXX XXX-XX-XX');
+  const requestAuthCode = async () => {
+    if (!/^(\+7|8)\d{10}$/.test(phone)) {
+      setError('Введите корректный номер телефона (+7XXXXXXXXXX)');
       return;
     }
 
     setLoading(true);
-    setMessage('');
+    setError('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/request-code`, {
+      const response = await fetch('https://api.get-aist.ru/api/auth/request-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Origin': window.location.origin
+          'Origin': 'https://aist-messenger-sandy.vercel.app'
         },
-        body: JSON.stringify({ phone })
+        body: JSON.stringify({ phone }),
+        credentials: 'include'
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Ошибка запроса кода');
-      }
-
-      if (data.method === 'telegram_sent') {
-        setMessage('✅ Код отправлен в Telegram! Проверьте сообщения.');
-        setCodeSentMethod('telegram_sent');
-      } else if (data.method === 'manual' && data.code) {
-        setMessage('Введите код, который вы получите вручную.');
-        setCodeSentMethod('manual');
+      if (response.ok && data.ok) {
+        if (data.method === 'telegram_sent') {
+          setMethod('telegram_sent');
+          setStep('code');
+        } else if (data.method === 'manual') {
+          setMethod('manual');
+          setCode(data.code); // автоматически подставляем код для удобства тестирования
+          setStep('code');
+        }
       } else {
-        setMessage('Введите код вручную.');
-        setCodeSentMethod('manual');
+        setError(data.error || 'Не удалось запросить код');
       }
-
-      setStep('code');
-    } catch (error) {
-      setMessage(`Ошибка: ${error.message}`);
+    } catch (err) {
+      setError('Ошибка сети. Проверьте подключение.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Проверка кода (локально)
   const verifyCode = () => {
-    if (!code || code.length !== 6 || isNaN(code)) {
-      setMessage('Введите 6-значный код');
-      return;
-    }
+    // Здесь вы можете отправить код на бэкенд для проверки
+    // Например: POST /api/auth/verify-code { phone, code }
+    alert(`Успешная авторизация!\nТелефон: ${phone}\nКод: ${code}`);
+    setStep('success');
+  };
 
-    // Здесь можно добавить проверку на сервере, если нужна
-    // Сейчас: просто проверяем, что код валиден (6 цифр)
-    setMessage('✅ Авторизация успешна!');
-    setTimeout(() => {
-      alert('Вы успешно вошли в систему!');
-      // Здесь можно перенаправить пользователя или сохранить сессию
-    }, 1000);
+  const handleCodeChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '');
+    setCode(value);
+    setError('');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (step === 'phone') {
+      requestAuthCode();
+    } else if (step === 'code') {
+      if (code.length < 6) {
+        setError('Код должен содержать 6 цифр');
+        return;
+      }
+      verifyCode();
+    }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-      <h2>Вход через Telegram</h2>
+    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '24px' }}>
+        {step === 'phone' ? 'Вход через Telegram' : 'Подтверждение кода'}
+      </h2>
 
-      {/* Шаг 1: Ввод номера */}
-      {step === 'phone' && (
-        <div>
-          <label>
-            Номер телефона:
+      {error && (
+        <div style={{ backgroundColor: '#ffebee', color: '#c62828', padding: '10px', borderRadius: '4px', marginBottom: '16px' }}>
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        {step === 'phone' ? (
+          <>
+            <p style={{ textAlign: 'center', marginBottom: '16px' }}>
+              Введите номер телефона, привязанный к Telegram
+            </p>
             <input
               type="tel"
               value={phone}
               onChange={handlePhoneChange}
-              placeholder="+7 XXX XXX-XX-XX"
-              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-              maxLength={12}
+              placeholder="+7 999 123-45-67"
+              style={{
+                width: '100%',
+                padding: '12px',
+                fontSize: '16px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                marginBottom: '16px'
+              }}
             />
-          </label>
-          <br /><br />
-          <button 
-            onClick={requestCode}
-            disabled={loading}
-            style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}
-          >
-            {loading ? 'Отправка...' : 'Получить код'}
-          </button>
-        </div>
-      )}
-
-      {/* Шаг 2: Ввод кода */}
-      {step === 'code' && (
-        <div>
-          <p>{message}</p>
-          
-          <label>
-            Код авторизации:
+            <button
+              type="submit"
+              disabled={loading || !phone}
+              style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: loading ? '#ccc' : '#0088cc',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                fontSize: '16px',
+                cursor: loading ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {loading ? 'Отправка...' : 'Получить код'}
+            </button>
+          </>
+        ) : step === 'code' ? (
+          <>
+            <p style={{ textAlign: 'center', marginBottom: '16px' }}>
+              {method === 'telegram_sent'
+                ? 'Код отправлен в ваш Telegram'
+                : 'Введите код из сообщения'}
+            </p>
             <input
               type="text"
               value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, '').substring(0, 6))}
-              placeholder="XXXXXX"
-              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-              maxLength={6}
-              autoFocus
+              onChange={handleCodeChange}
+              placeholder="123456"
+              maxLength="6"
+              style={{
+                width: '100%',
+                padding: '12px',
+                fontSize: '16px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                marginBottom: '16px',
+                textAlign: 'center',
+                letterSpacing: '4px'
+              }}
             />
-          </label>
-          <br /><br />
-          <button 
-            onClick={verifyCode}
-            style={{ padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px' }}
-          >
-            Войти
-          </button>
-          <br /><br />
-          <button 
-            onClick={() => setStep('phone')}
-            style={{ padding: '5px 10px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px' }}
-          >
-            Назад
-          </button>
-        </div>
-      )}
-
-      {/* Сообщение */}
-      {message && (
-        <div style={{ 
-          marginTop: '10px', 
-          padding: '8px', 
-          backgroundColor: message.includes('ошибка') ? '#f8d7da' : '#d4edda', 
-          color: message.includes('ошибка') ? '#721c24' : '#155724',
-          borderRadius: '4px'
-        }}>
-          {message}
-        </div>
-      )}
+            <button
+              type="submit"
+              disabled={loading || code.length < 6}
+              style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: loading ? '#ccc' : '#4caf50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                fontSize: '16px',
+                cursor: loading ? 'not-allowed' : 'pointer'
+              }}
+            >
+              Продолжить
+            </button>
+            <button
+              type="button"
+              onClick={() => setStep('phone')}
+              style={{
+                width: '100%',
+                padding: '12px',
+                marginTop: '12px',
+                backgroundColor: '#f5f5f5',
+                color: '#333',
+                border: '1px solid #ddd',
+                borderRadius: '4px',
+                fontSize: '16px',
+                cursor: 'pointer'
+              }}
+            >
+              Назад
+            </button>
+          </>
+        ) : (
+          <div style={{ textAlign: 'center' }}>
+            <h3>✅ Авторизация успешна!</h3>
+            <p>Вы вошли в систему.</p>
+          </div>
+        )}
+      </form>
     </div>
   );
-}
+};
+
+export default Register;
