@@ -14,7 +14,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch('/api/auth/request-code', {
+      const res = await fetch('https://api.get-aist.ru/api/auth/request-code', { // Прямой вызов API
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
