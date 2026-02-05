@@ -1,4 +1,3 @@
-// /src/pages/register.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ChatLayout from './ChatLayout'; // в той же папке
@@ -12,8 +11,7 @@ const Register = () => {
   const [method, setMethod] = useState('manual');
   const navigate = useNavigate();
 
-  // Проверка авторизации при монтировании
-  useEffect(() => {
+   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
       navigate('/chat');
