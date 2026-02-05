@@ -14,7 +14,7 @@ export default function Register() {
     }
 
     try {
-      // --- ОТПРАВКА НАПРЯМУЮ НА БЭКЕНД ДЛЯ VERCCEL ---
+      // --- ВАЖНО ДЛЯ VERCCEL: отправляем запрос напрямую на бэкенд ---
       const res = await fetch('http://45.150.10.220:3001/api/auth/request-code', {
         method: 'POST',
         headers: {
