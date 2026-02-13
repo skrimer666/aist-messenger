@@ -10,16 +10,14 @@ export default function Profile() {
 
   return (
     <div style={{ padding: 20, textAlign: 'center' }}>
-      <h1>Мой профиль</h1> {/* Исправлено: обернул "Мой профиль" в тег */}
+      <h2>Мой профиль</h2>
       {userId ? (
         <>
           <p>ID: {userId}</p>
           <QRCode value={`aist://user/${userId}`} size={200} />
         </>
       ) : (
-        <p>
-          Не авторизован. <a href="/">Войти</a> {/* Исправлено: [Войти](/) на <a href="/">Войти</a> */}
-        </p>
+        <p>Не авторизован. <a href="/">Войти</a></p>
       )}
     </div>
   );
