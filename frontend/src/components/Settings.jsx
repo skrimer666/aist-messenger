@@ -72,19 +72,106 @@ function FoldersView({ theme, base, onBack }) {
                 autoFocus
                 style={{ flex: 1, minWidth: 120, padding: '8px 12px', borderRadius: 8, border: `1px solid ${theme.border}`, background: theme.inputBg, color: theme.text, fontSize: 15, outline: 'none' }}
               />
-              <button type="button" style={{ padding: '6px 12px', borderRadius: 8, border: 'none', background: theme.accent, color: theme.accentText || '#fff', cursor: 'pointer' }} onClick={submitRename}>Готово</button>
+              <button 
+                type="button" 
+                style={{ 
+                  padding: '8px 14px', 
+                  borderRadius: 8, 
+                  border: 'none', 
+                  background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent}dd)`, 
+                  color: theme.accentText || '#fff', 
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  fontSize: 14,
+                  transition: 'all 0.2s ease',
+                  boxShadow: `0 2px 8px ${theme.glow || 'rgba(10, 132, 255, .3)'}`
+                }} 
+                onClick={submitRename}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.transform = 'scale(1.02)'; 
+                  e.currentTarget.style.boxShadow = `0 4px 12px ${theme.glow || 'rgba(10, 132, 255, .5)'}`;
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.transform = 'scale(1)'; 
+                  e.currentTarget.style.boxShadow = `0 2px 8px ${theme.glow || 'rgba(10, 132, 255, .3)'}`;
+                }}
+              >Готово</button>
             </>
           ) : (
             <>
               <span style={base.rowLabel}>{f.name}</span>
               <span style={{ fontSize: 13, color: theme.textMuted }}>{(f.chatIds || []).length} чатов</span>
-              <button type="button" style={{ padding: 6, border: 'none', background: 'transparent', color: theme.accent, cursor: 'pointer', fontSize: 13 }} onClick={() => handleRename(f.id)}>Переименовать</button>
-              <button type="button" style={{ padding: 6, border: 'none', background: 'transparent', color: '#e53935', cursor: 'pointer', fontSize: 13 }} onClick={() => handleDelete(f.id)}>Удалить</button>
+              <button 
+                type="button" 
+                style={{ 
+                  padding: '6px 10px', 
+                  border: 'none', 
+                  background: 'transparent', 
+                  color: theme.accent, 
+                  cursor: 'pointer', 
+                  fontSize: 13,
+                  fontWeight: 500,
+                  borderRadius: 6,
+                  transition: 'all 0.2s ease'
+                }} 
+                onClick={() => handleRename(f.id)}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.background = `${theme.accent}15`; 
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.background = 'transparent'; 
+                }}
+              >Переименовать</button>
+              <button 
+                type="button" 
+                style={{ 
+                  padding: '6px 10px', 
+                  border: 'none', 
+                  background: 'transparent', 
+                  color: '#e53935', 
+                  cursor: 'pointer', 
+                  fontSize: 13,
+                  fontWeight: 500,
+                  borderRadius: 6,
+                  transition: 'all 0.2s ease'
+                }} 
+                onClick={() => handleDelete(f.id)}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.background = 'rgba(229, 57, 53, .1)'; 
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.background = 'transparent'; 
+                }}
+              >Удалить</button>
             </>
           )}
         </div>
       ))}
-      <button type="button" style={{ marginTop: 12, padding: '12px 16px', borderRadius: 12, border: `2px dashed ${theme.border}`, background: 'transparent', color: theme.accent, fontSize: 15, fontWeight: 500, cursor: 'pointer', width: '100%' }} onClick={handleAdd}>+ Создать папку</button>
+      <button 
+        type="button" 
+        style={{ 
+          marginTop: 12, 
+          padding: '12px 16px', 
+          borderRadius: 12, 
+          border: `2px dashed ${theme.border}`, 
+          background: 'transparent', 
+          color: theme.accent, 
+          fontSize: 15, 
+          fontWeight: 500, 
+          cursor: 'pointer', 
+          width: '100%',
+          transition: 'all 0.2s ease'
+        }} 
+        onClick={handleAdd}
+        onMouseEnter={(e) => { 
+          e.currentTarget.style.borderColor = theme.accent; 
+          e.currentTarget.style.background = `${theme.accent}10`; 
+        }}
+        onMouseLeave={(e) => { 
+          e.currentTarget.style.borderColor = theme.border; 
+          e.currentTarget.style.background = 'transparent'; 
+        }}
+      >+ Создать папку</button>
     </div>
   );
 }
@@ -246,7 +333,20 @@ export default function Settings() {
         </div>
       ))}
       <div style={base.sectionTitle}>Аккаунт</div>
-      <div style={base.logoutRow} onClick={() => { localStorage.removeItem('aist_token'); window.location.assign('/'); }}>
+      <div 
+        style={{ 
+          ...base.logoutRow, 
+          cursor: 'pointer',
+          transition: 'all 0.2s ease'
+        }} 
+        onClick={() => { localStorage.removeItem('aist_token'); window.location.assign('/'); }}
+        onMouseEnter={(e) => { 
+          e.currentTarget.style.background = 'rgba(229, 57, 53, .08)'; 
+        }}
+        onMouseLeave={(e) => { 
+          e.currentTarget.style.background = base.logoutRow.background; 
+        }}
+      >
         <span style={base.logoutText}>Выйти</span>
       </div>
     </div>

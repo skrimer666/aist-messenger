@@ -197,19 +197,35 @@ export default function CallScreen({
       type="button"
       onClick={onClick}
       style={{
-        width: 56,
-        height: 56,
+        width: 58,
+        height: 58,
         borderRadius: '50%',
         border: 'none',
-        background: active ? theme.accent : (theme.sidebarBg || 'rgba(255,255,255,.12)'),
+        background: active ? `linear-gradient(135deg, ${theme.accent}, ${theme.accent}dd)` : (theme.sidebarBg || 'rgba(255,255,255,.12)'),
         color: active ? theme.accentText : theme.text,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        boxShadow: active ? `0 4px 16px ${theme.glow || 'rgba(10, 132, 255, .35)'}` : 'none'
       }}
       title={label}
       aria-label={label}
+      onMouseEnter={(e) => { 
+        e.currentTarget.style.transform = 'scale(1.08)';
+        if (!active) {
+          e.currentTarget.style.background = theme.isDark ? 'rgba(255,255,255,.16)' : 'rgba(0,0,0,.08)';
+        }
+      }}
+      onMouseLeave={(e) => { 
+        e.currentTarget.style.transform = 'scale(1)';
+        if (!active) {
+          e.currentTarget.style.background = theme.sidebarBg || 'rgba(255,255,255,.12)';
+        }
+      }}
+      onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+      onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
     >
       <Icon width={24} height={24} />
     </button>
@@ -282,23 +298,49 @@ export default function CallScreen({
       gap: 28,
     },
     endBtn: {
-      width: 64,
-      height: 64,
+      width: 68,
+      height: 68,
       borderRadius: '50%',
       border: 'none',
-      background: '#e53935',
+      background: 'linear-gradient(135deg, #e53935, #d32f2f)',
       color: '#fff',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      boxShadow: '0 4px 16px rgba(229, 57, 53, .4)'
     },
   };
 
   return (
     <div style={styles.overlay}>
       <header style={styles.header}>
-        <button type="button" style={{ border: 'none', background: 'transparent', color: theme.accent, padding: 8 }} onClick={onEnd} aria-label="Назад">
+        <button 
+          type="button" 
+          style={{ 
+            border: 'none', 
+            background: 'transparent', 
+            color: theme.accent, 
+            padding: 10,
+            borderRadius: 12,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onClick={onEnd} 
+          aria-label="Назад"
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.background = theme.isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
+            e.currentTarget.style.transform = 'scale(1.05)';
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
           <IconBack width={24} height={24} />
         </button>
         <span style={{ flex: 1, fontSize: 17, fontWeight: 600 }}>
@@ -329,7 +371,23 @@ export default function CallScreen({
         {controlBtn(muted ? IconMicOff : IconMic, muted, () => setMuted(!muted), muted ? 'Включить микрофон' : 'Выключить микрофон')}
         {controlBtn(IconSpeaker, speaker, () => setSpeaker(!speaker), speaker ? 'Телефон' : 'Громкая связь')}
         {controlBtn(IconKeypad, showKeypad, () => setShowKeypad(!showKeypad), 'Клавиатура')}
-        <button type="button" style={styles.endBtn} onClick={() => { if (useSharedWs && callCtx) callCtx.send('call:hangup'); onEnd(); }} title="Завершить" aria-label="Завершить звонок">
+        <button 
+          type="button" 
+          style={styles.endBtn} 
+          onClick={() => { if (useSharedWs && callCtx) callCtx.send('call:hangup'); onEnd(); }} 
+          title="Завершить" 
+          aria-label="Завершить звонок"
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.transform = 'scale(1.08)';
+            e.currentTarget.style.boxShadow = '0 6px 24px rgba(229, 57, 53, .6)';
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 4px 16px rgba(229, 57, 53, .4)';
+          }}
+          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+          onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
+        >
           <span style={{ fontSize: 28, lineHeight: 1, color: '#fff' }}>✕</span>
         </button>
       </div>

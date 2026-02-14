@@ -175,18 +175,102 @@ function ChatView({ chat, onBack }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <header style={{ height: 64, padding: '0 8px 0 4px', display: 'flex', alignItems: 'center', gap: 6, background: theme.headerBg, backdropFilter: 'blur(24px) saturate(180%)', WebkitBackdropFilter: 'blur(24px) saturate(180%)', borderBottom: `1px solid ${theme.border}`, boxShadow: isDark ? '0 4px 20px rgba(0,0,0,.15)' : '0 4px 20px rgba(0,0,0,.06)' }}>
-        <button type="button" style={{ border: 'none', background: 'transparent', color: accent, padding: 10, cursor: 'pointer', display: isMobile ? 'flex' : 'none', alignItems: 'center', justifyContent: 'center', borderRadius: 12, transition: 'all 0.2s' }} onClick={onBack} aria-label="Назад">
+        <button
+          type="button"
+          style={{
+            border: 'none',
+            background: 'transparent', 
+            color: accent, 
+            padding: 10, 
+            cursor: 'pointer',
+            display: isMobile ? 'flex' : 'none', 
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 12, 
+            transition: 'all 0.2s ease' 
+          }}
+          onClick={onBack} 
+          aria-label="Назад"
+          onMouseEnter={(e) => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; }}
+        >
           <IconBack width={24} height={24} />
         </button>
-        <button type="button" onClick={() => chat.type === 'channel' && setShowChannelInfo(true)} style={{ flex: 1, border: 'none', background: 'transparent', padding: '10px 12px', cursor: chat.type === 'channel' ? 'pointer' : 'default', textAlign: 'left', minWidth: 0, borderRadius: 12, transition: 'background 0.2s' }}>
+        <button
+          type="button"
+          onClick={() => chat.type === 'channel' && setShowChannelInfo(true)} 
+          style={{
+            flex: 1, 
+            border: 'none',
+            background: 'transparent', 
+            padding: '10px 12px', 
+            cursor: chat.type === 'channel' ? 'pointer' : 'default', 
+            textAlign: 'left', 
+            minWidth: 0, 
+            borderRadius: 12, 
+            transition: 'background 0.2s ease' 
+          }}
+          onMouseEnter={(e) => chat.type === 'channel' && (e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)')}
+          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+        >
           <span style={{ fontWeight: 700, fontSize: 18, color: theme.text, display: 'block', letterSpacing: '-0.3px' }}>{chat.name}</span>
           {chat.type !== 'channel' && <span style={{ fontSize: 13, color: theme.textMuted, fontWeight: 500 }}>онлайн</span>}
         </button>
         {chat.type !== 'channel' && (
           <>
-            <button type="button" style={{ border: 'none', background: 'transparent', padding: 10, color: theme.textMuted, cursor: 'pointer', borderRadius: 12, transition: 'all 0.2s' }} aria-label="Голосовой звонок" onClick={() => setCallMode('voice')}><IconPhone width={22} height={22} /></button>
-            <button type="button" style={{ border: 'none', background: 'transparent', padding: 10, color: theme.textMuted, cursor: 'pointer', borderRadius: 12, transition: 'all 0.2s' }} aria-label="Видеозвонок" onClick={() => setCallMode('video')}><IconVideo width={22} height={22} /></button>
-            <button type="button" style={{ border: 'none', background: 'transparent', padding: 10, color: theme.textMuted, cursor: 'pointer', borderRadius: 12, transition: 'all 0.2s' }} aria-label="Ещё"><IconMore width={22} height={22} /></button>
+            <button 
+              type="button" 
+              style={{ 
+                border: 'none', 
+                background: 'transparent', 
+                padding: 10, 
+                color: theme.textMuted, 
+                cursor: 'pointer', 
+                borderRadius: 12, 
+                transition: 'all 0.2s ease' 
+              }} 
+              aria-label="Голосовой звонок" 
+              onClick={() => setCallMode('voice')}
+              onMouseEnter={(e) => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'; e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.color = accent; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.color = theme.textMuted; }}
+            >
+              <IconPhone width={22} height={22} />
+            </button>
+            <button 
+              type="button" 
+              style={{ 
+                border: 'none', 
+                background: 'transparent', 
+                padding: 10, 
+                color: theme.textMuted, 
+                cursor: 'pointer', 
+                borderRadius: 12, 
+                transition: 'all 0.2s ease' 
+              }} 
+              aria-label="Видеозвонок" 
+              onClick={() => setCallMode('video')}
+              onMouseEnter={(e) => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'; e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.color = accent; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.color = theme.textMuted; }}
+            >
+              <IconVideo width={22} height={22} />
+            </button>
+            <button 
+              type="button" 
+              style={{ 
+                border: 'none', 
+                background: 'transparent', 
+                padding: 10, 
+                color: theme.textMuted, 
+                cursor: 'pointer', 
+                borderRadius: 12, 
+                transition: 'all 0.2s ease' 
+              }} 
+              aria-label="Ещё"
+              onMouseEnter={(e) => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'; e.currentTarget.style.transform = 'scale(1.08)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; }}
+            >
+              <IconMore width={22} height={22} />
+            </button>
           </>
         )}
       </header>
@@ -204,9 +288,50 @@ function ChatView({ chat, onBack }) {
             <div style={{ fontSize: 14, color: theme.textMuted, marginBottom: 10 }}>Ссылка на канал:</div>
             <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
               <input readOnly value={channelLink} style={{ flex: 1, padding: '10px 14px', borderRadius: 12, border: `1px solid ${theme.border}`, background: theme.inputBg, color: theme.text, fontSize: 14 }} />
-              <button type="button" onClick={() => { navigator.clipboard?.writeText(channelLink); }} style={{ padding: '10px 18px', borderRadius: 12, border: 'none', background: accent, color: theme.accentText || '#fff', cursor: 'pointer', fontSize: 14, fontWeight: 600, boxShadow: '0 4px 12px rgba(10, 132, 255, .3)' }}>Копировать</button>
+              <button 
+                type="button" 
+                onClick={() => { navigator.clipboard?.writeText(channelLink); }} 
+                style={{ 
+                  padding: '10px 18px', 
+                  borderRadius: 12, 
+                  border: 'none', 
+                  background: `linear-gradient(135deg, ${accent}, ${accent}dd)`, 
+                  color: theme.accentText || '#fff', 
+                  cursor: 'pointer', 
+                  fontSize: 14, 
+                  fontWeight: 600, 
+                  boxShadow: `0 4px 16px ${theme.glow || 'rgba(10, 132, 255, .3)'}`,
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.transform = 'scale(1.02)'; 
+                  e.currentTarget.style.boxShadow = `0 6px 20px ${theme.glow || 'rgba(10, 132, 255, .5)'}`;
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.transform = 'scale(1)'; 
+                  e.currentTarget.style.boxShadow = `0 4px 16px ${theme.glow || 'rgba(10, 132, 255, .3)'}`;
+                }}
+              >Копировать</button>
             </div>
-            <button type="button" onClick={() => setShowChannelInfo(false)} style={{ marginTop: 20, width: '100%', padding: 12, borderRadius: 12, border: 'none', background: theme.sidebarBg, color: theme.text, cursor: 'pointer', fontSize: 15, fontWeight: 600 }}>Закрыть</button>
+            <button 
+              type="button" 
+              onClick={() => setShowChannelInfo(false)} 
+              style={{ 
+                marginTop: 20, 
+                width: '100%', 
+                padding: 12, 
+                borderRadius: 12, 
+                border: 'none', 
+                background: theme.sidebarBg, 
+                color: theme.text, 
+                cursor: 'pointer', 
+                fontSize: 15, 
+                fontWeight: 600,
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = theme.sidebarBg}
+            >Закрыть</button>
           </div>
         </div>
       )}
@@ -254,47 +379,115 @@ function ChatView({ chat, onBack }) {
         <div style={{ padding: 12, borderTop: `1px solid ${theme.border}`, background: theme.headerBg, backdropFilter: 'blur(20px)' }}>
           <div style={{ position: 'relative', display: 'inline-block' }}>
             {attachPreview.type === 'image' ? <img src={attachPreview.url} alt="" style={{ maxHeight: 140, borderRadius: 12, boxShadow: '0 4px 12px rgba(0,0,0,.15)' }} /> : <video src={attachPreview.url} style={{ maxHeight: 140, borderRadius: 12, boxShadow: '0 4px 12px rgba(0,0,0,.15)' }} />}
-            <button type="button" onClick={() => setAttachPreview(null)} style={{ position: 'absolute', top: 8, right: 8, border: 'none', background: 'rgba(0,0,0,.6)', color: '#fff', borderRadius: 50, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>×</button>
+            <button 
+              type="button" 
+              onClick={() => setAttachPreview(null)} 
+              style={{ 
+                position: 'absolute', 
+                top: 8, 
+                right: 8, 
+                border: 'none', 
+                background: 'rgba(0,0,0,.7)', 
+                color: '#fff', 
+                borderRadius: 50, 
+                width: 30, 
+                height: 30, 
+                cursor: 'pointer', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                fontSize: 18,
+                fontWeight: 300,
+                transition: 'all 0.2s ease'
+              }} 
+              onMouseEnter={(e) => { 
+                e.currentTarget.style.background = 'rgba(239, 68, 68, .8)'; 
+                e.currentTarget.style.transform = 'scale(1.1)'; 
+              }}
+              onMouseLeave={(e) => { 
+                e.currentTarget.style.background = 'rgba(0,0,0,.7)'; 
+                e.currentTarget.style.transform = 'scale(1)'; 
+              }}
+            >×</button>
           </div>
         </div>
       )}
       <div style={{ padding: '12px 16px 14px', borderTop: `1px solid ${theme.border}`, background: theme.headerBg, backdropFilter: 'blur(24px) saturate(180%)', WebkitBackdropFilter: 'blur(24px) saturate(180%)', display: 'flex', gap: 10, alignItems: 'center' }}>
-        <label style={{ cursor: 'pointer', color: theme.textMuted, padding: 8, flexShrink: 0, borderRadius: 14, transition: 'all 0.2s' }} aria-label="Прикрепить файл" onMouseEnter={(e) => e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
+        <label 
+          style={{
+            cursor: 'pointer',
+            color: theme.textMuted, 
+            padding: 10, 
+            flexShrink: 0, 
+            borderRadius: 14, 
+            transition: 'all 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          aria-label="Прикрепить файл" 
+          onMouseEnter={(e) => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; }}
+        >
           <input type="file" accept="image/*,video/*,.pdf,.doc,.docx" style={{ display: 'none' }} onChange={onAttach} />
           <IconAttach width={24} height={24} />
         </label>
         <input
-          style={{ flex: 1, minWidth: 0, padding: '14px 20px', borderRadius: 26, border: 'none', background: theme.messageInputBg || theme.inputBg, color: theme.text, fontSize: 15, outline: 'none', transition: 'all 0.2s', boxShadow: isDark ? '0 2px 8px rgba(0,0,0,.15)' : '0 2px 8px rgba(0,0,0,.05)' }}
+          style={{
+            flex: 1, 
+            minWidth: 0, 
+            padding: '14px 20px', 
+            borderRadius: 24, 
+            border: 'none',
+            background: theme.messageInputBg || theme.inputBg, 
+            color: theme.text, 
+            fontSize: 15, 
+            outline: 'none', 
+            transition: 'all 0.2s ease', 
+            boxShadow: isDark ? '0 2px 8px rgba(0,0,0,.15)' : '0 2px 8px rgba(0,0,0,.05)'
+          }}
           placeholder="Сообщение"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onFocus={(e) => e.currentTarget.style.boxShadow = `0 0 0 3px ${accent}20`}
+          onBlur={(e) => e.currentTarget.style.boxShadow = isDark ? '0 2px 8px rgba(0,0,0,.15)' : '0 2px 8px rgba(0,0,0,.05)'}
           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (attachPreview) sendMessage({ ...attachPreview, caption: inputValue }); else sendMessage(inputValue); } }}
         />
         <button
           type="button"
           onClick={() => attachPreview ? sendMessage({ ...attachPreview, caption: inputValue }) : sendMessage(inputValue)}
           style={{
-            width: 48,
-            height: 48,
-            minWidth: 48,
-            minHeight: 48,
+            width: 50,
+            height: 50,
+            minWidth: 50,
+            minHeight: 50,
             flexShrink: 0,
             padding: 0,
             borderRadius: '50%',
             border: 'none',
-            background: accent,
+            background: `linear-gradient(135deg, ${accent}, ${accent}dd)`,
             color: theme.accentText || '#fff',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: 18,
-            boxShadow: `0 6px 20px ${theme.glow || 'rgba(10, 132, 255, .4)'}`,
-            transition: 'all 0.2s',
+            boxShadow: `0 4px 16px ${theme.glow || 'rgba(10, 132, 255, .4)'}`,
+            transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
           aria-label="Отправить"
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.transform = 'scale(1.08)'; 
+            e.currentTarget.style.boxShadow = `0 6px 24px ${theme.glow || 'rgba(10, 132, 255, .6)'}`;
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.transform = 'scale(1)'; 
+            e.currentTarget.style.boxShadow = `0 4px 16px ${theme.glow || 'rgba(10, 132, 255, .4)'}`;
+          }}
+          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+          onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
         >
-          <IconSend width={22} height={22} />
+          <IconSend width={24} height={24} />
         </button>
       </div>
     </div>
@@ -474,7 +667,31 @@ export default function Chats() {
       <div style={{ ...s.sidebar, display: showListOnly ? 'none' : 'flex', ...(isMobile ? { width: '100%', maxWidth: '100%' } : {}) }}>
         <header style={s.header}>
           <span style={s.headerTitle}>Чаты</span>
-          <button type="button" style={{ border: 'none', background: 'transparent', color: theme.accent, padding: 8 }} onClick={() => setNewChatOpen(true)} aria-label="Новое сообщение">
+          <button 
+            type="button" 
+            style={{ 
+              border: 'none', 
+              background: 'transparent', 
+              color: accent, 
+              padding: 10,
+              borderRadius: 12,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }} 
+            onClick={() => setNewChatOpen(true)} 
+            aria-label="Новое сообщение"
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'; 
+              e.currentTarget.style.transform = 'scale(1.05)'; 
+            }}
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.background = 'transparent'; 
+              e.currentTarget.style.transform = 'scale(1)'; 
+            }}
+          >
             <IconPen width={24} height={24} />
           </button>
         </header>
@@ -485,9 +702,66 @@ export default function Chats() {
           </div>
         </div>
         <div style={{ padding: '8px 14px 12px', display: 'flex', gap: 8, overflowX: 'auto', flexShrink: 0 }}>
-          <button type="button" style={{ padding: '8px 16px', borderRadius: 20, border: 'none', background: activeFolderId === FOLDER_ALL ? accent : theme.sidebarBg, color: activeFolderId === FOLDER_ALL ? (theme.accentText || '#fff') : theme.textMuted, fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s' }} onClick={() => { setFolderMenuChatId(null); setActiveFolderId(FOLDER_ALL); }}>Все чаты</button>
+          <button 
+            type="button" 
+            style={{ 
+              padding: '8px 16px', 
+              borderRadius: 20, 
+              border: 'none', 
+              background: activeFolderId === FOLDER_ALL ? `linear-gradient(135deg, ${accent}, ${accent}dd)` : theme.sidebarBg, 
+              color: activeFolderId === FOLDER_ALL ? (theme.accentText || '#fff') : theme.textMuted, 
+              fontSize: 13, 
+              fontWeight: 600, 
+              cursor: 'pointer', 
+              whiteSpace: 'nowrap', 
+              transition: 'all 0.25s ease',
+              boxShadow: activeFolderId === FOLDER_ALL ? `0 2px 12px ${theme.glow || 'rgba(10, 132, 255, .35)'}` : 'none'
+            }} 
+            onClick={() => { setFolderMenuChatId(null); setActiveFolderId(FOLDER_ALL); }}
+            onMouseEnter={(e) => { 
+              if (activeFolderId !== FOLDER_ALL) {
+                e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
+                e.currentTarget.style.transform = 'scale(1.02)';
+              }
+            }}
+            onMouseLeave={(e) => { 
+              if (activeFolderId !== FOLDER_ALL) {
+                e.currentTarget.style.background = theme.sidebarBg;
+                e.currentTarget.style.transform = 'scale(1)';
+              }
+            }}
+          >Все чаты</button>
           {folders.map((f) => (
-            <button key={f.id} type="button" style={{ padding: '8px 16px', borderRadius: 20, border: 'none', background: activeFolderId === f.id ? accent : theme.sidebarBg, color: activeFolderId === f.id ? (theme.accentText || '#fff') : theme.textMuted, fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s' }} onClick={() => { setFolderMenuChatId(null); setActiveFolderId(f.id); }}>{f.name}</button>
+            <button 
+              key={f.id} 
+              type="button" 
+              style={{ 
+                padding: '8px 16px', 
+                borderRadius: 20, 
+                border: 'none', 
+                background: activeFolderId === f.id ? `linear-gradient(135deg, ${accent}, ${accent}dd)` : theme.sidebarBg, 
+                color: activeFolderId === f.id ? (theme.accentText || '#fff') : theme.textMuted, 
+                fontSize: 13, 
+                fontWeight: 600, 
+                cursor: 'pointer', 
+                whiteSpace: 'nowrap', 
+                transition: 'all 0.25s ease',
+                boxShadow: activeFolderId === f.id ? `0 2px 12px ${theme.glow || 'rgba(10, 132, 255, .35)'}` : 'none'
+              }} 
+              onClick={() => { setFolderMenuChatId(null); setActiveFolderId(f.id); }}
+              onMouseEnter={(e) => { 
+                if (activeFolderId !== f.id) {
+                  e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
+                  e.currentTarget.style.transform = 'scale(1.02)';
+                }
+              }}
+              onMouseLeave={(e) => { 
+                if (activeFolderId !== f.id) {
+                  e.currentTarget.style.background = theme.sidebarBg;
+                  e.currentTarget.style.transform = 'scale(1)';
+                }
+              }}
+            >{f.name}</button>
           ))}
         </div>
         {/* Истории */}
@@ -572,17 +846,25 @@ export default function Chats() {
             height: 60,
             borderRadius: 30,
             border: 'none',
-            background: accent,
+            background: `linear-gradient(135deg, ${accent}, ${accent}dd)`,
             color: theme.accentText || '#fff',
-            boxShadow: `0 8px 32px ${theme.glow || 'rgba(10, 132, 255, .5)'}`,
+            boxShadow: `0 6px 24px ${theme.glow || 'rgba(10, 132, 255, .5)'}`,
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
-          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.transform = 'scale(1.1) translateY(-2px)'; 
+            e.currentTarget.style.boxShadow = `0 12px 40px ${theme.glow || 'rgba(10, 132, 255, .7)'}`;
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.transform = 'scale(1) translateY(0)'; 
+            e.currentTarget.style.boxShadow = `0 6px 24px ${theme.glow || 'rgba(10, 132, 255, .5)'}`;
+          }}
+          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95) translateY(0)'}
+          onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1.1) translateY(-2px)'}
         >
           <IconPen width={28} height={28} />
         </button>

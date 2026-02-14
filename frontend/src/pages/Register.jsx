@@ -415,24 +415,27 @@ export default function Register() {
       buttonsRow: { display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap" },
       primaryBtn: {
         flex: "1 1 160px",
-        padding: "12px 14px",
+        padding: "14px 18px",
         borderRadius: 14,
-        border: "1px solid rgba(255,255,255,.25)",
+        border: "none",
         color: theme.accentText,
-        background: theme.accent,
-        boxShadow: "0 10px 30px rgba(0,0,0,.2)",
+        background: `linear-gradient(135deg, ${theme.accent}, ${theme.accent}dd)`,
+        boxShadow: `0 6px 20px ${theme.glow || 'rgba(10, 132, 255, .35)'}`,
         fontWeight: 600,
         cursor: "pointer",
+        transition: "all 0.25s ease",
       },
       secondaryBtn: {
         flex: "1 1 160px",
-        padding: "12px 14px",
+        padding: "14px 18px",
         borderRadius: 14,
         border: `1px solid ${theme.border}`,
         color: theme.text,
         background: theme.sidebarBg || "rgba(255,255,255,.08)",
         cursor: "pointer",
         fontSize: 14,
+        fontWeight: 500,
+        transition: "all 0.2s ease",
       },
       disabled: { opacity: 0.55, cursor: "not-allowed" },
       hintBox: {
@@ -500,8 +503,19 @@ export default function Register() {
             style={{
               ...glassStyle.tab,
               ...(authMethod === "telegram" ? glassStyle.tabActive : {}),
+              transition: "all 0.2s ease"
             }}
             onClick={() => setAuthMethod("telegram")}
+            onMouseEnter={(e) => { 
+              if (authMethod !== "telegram") {
+                e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)';
+              }
+            }}
+            onMouseLeave={(e) => { 
+              if (authMethod !== "telegram") {
+                e.currentTarget.style.background = 'transparent';
+              }
+            }}
           >
             По коду из Telegram
           </button>
@@ -510,8 +524,19 @@ export default function Register() {
             style={{
               ...glassStyle.tab,
               ...(authMethod === "qr" ? glassStyle.tabActive : {}),
+              transition: "all 0.2s ease"
             }}
             onClick={() => setAuthMethod("qr")}
+            onMouseEnter={(e) => { 
+              if (authMethod !== "qr") {
+                e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)';
+              }
+            }}
+            onMouseLeave={(e) => { 
+              if (authMethod !== "qr") {
+                e.currentTarget.style.background = 'transparent';
+              }
+            }}
           >
             По QR
           </button>
@@ -539,7 +564,10 @@ export default function Register() {
                   <button
                     type="button"
                     disabled={qrConfirming}
-                    style={glassStyle.primaryBtn}
+                    style={{
+                      ...glassStyle.primaryBtn,
+                      ...(qrConfirming ? glassStyle.disabled : null)
+                    }}
                     onClick={async () => {
                       setQrConfirming(true);
                       try {
@@ -556,6 +584,18 @@ export default function Register() {
                       }
                       setQrConfirming(false);
                     }}
+                    onMouseEnter={(e) => { 
+                      if (!qrConfirming) {
+                        e.currentTarget.style.transform = 'scale(1.02)'; 
+                        e.currentTarget.style.boxShadow = `0 8px 28px ${theme.glow || 'rgba(10, 132, 255, .5)'}`;
+                      }
+                    }}
+                    onMouseLeave={(e) => { 
+                      e.currentTarget.style.transform = 'scale(1)'; 
+                      e.currentTarget.style.boxShadow = `0 6px 20px ${theme.glow || 'rgba(10, 132, 255, .35)'}`;
+                    }}
+                    onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.98)'}
+                    onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
                   >
                     {qrConfirming ? "Отправка…" : "Подтвердить вход на ПК"}
                   </button>
@@ -629,6 +669,18 @@ export default function Register() {
                   ...glassStyle.primaryBtn,
                   ...(!canRequest ? glassStyle.disabled : null),
                 }}
+                onMouseEnter={(e) => { 
+                  if (canRequest) {
+                    e.currentTarget.style.transform = 'scale(1.02)'; 
+                    e.currentTarget.style.boxShadow = `0 8px 28px ${theme.glow || 'rgba(10, 132, 255, .5)'}`;
+                  }
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.transform = 'scale(1)'; 
+                  e.currentTarget.style.boxShadow = `0 6px 20px ${theme.glow || 'rgba(10, 132, 255, .35)'}`;
+                }}
+                onMouseDown={(e) => canRequest && (e.currentTarget.style.transform = 'scale(0.98)')}
+                onMouseUp={(e) => canRequest && (e.currentTarget.style.transform = 'scale(1.02)')}
               >
                 {busy ? "Отправляем…" : cooldown > 0 ? `Подождите ${cooldown}с` : "Получить код"}
               </button>
@@ -696,6 +748,18 @@ export default function Register() {
                   ...glassStyle.primaryBtn,
                   ...(!canVerify ? glassStyle.disabled : null),
                 }}
+                onMouseEnter={(e) => { 
+                  if (canVerify) {
+                    e.currentTarget.style.transform = 'scale(1.02)'; 
+                    e.currentTarget.style.boxShadow = `0 8px 28px ${theme.glow || 'rgba(10, 132, 255, .5)'}`;
+                  }
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.transform = 'scale(1)'; 
+                  e.currentTarget.style.boxShadow = `0 6px 20px ${theme.glow || 'rgba(10, 132, 255, .35)'}`;
+                }}
+                onMouseDown={(e) => canVerify && (e.currentTarget.style.transform = 'scale(0.98)')}
+                onMouseUp={(e) => canVerify && (e.currentTarget.style.transform = 'scale(1.02)')}
               >
                 {busy ? "Проверяем…" : "Войти"}
               </button>
@@ -712,6 +776,14 @@ export default function Register() {
                   ...glassStyle.secondaryBtn,
                   ...(busy ? glassStyle.disabled : null),
                 }}
+                onMouseEnter={(e) => { 
+                  if (!busy) {
+                    e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.12)' : 'rgba(0,0,0,.08)';
+                  }
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.background = glassStyle.secondaryBtn.background;
+                }}
               >
                 Изменить номер
               </button>
@@ -725,6 +797,14 @@ export default function Register() {
                   ...(busy || cooldown > 0 ? glassStyle.disabled : null),
                 }}
                 title={cooldown > 0 ? `Повторить можно через ${cooldown}с` : "Отправить новый код"}
+                onMouseEnter={(e) => { 
+                  if (!busy && cooldown <= 0) {
+                    e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.12)' : 'rgba(0,0,0,.08)';
+                  }
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.background = glassStyle.secondaryBtn.background;
+                }}
               >
                 {cooldown > 0 ? `Повторить через ${cooldown}с` : "Отправить ещё раз"}
               </button>
