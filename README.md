@@ -55,18 +55,31 @@ npm run preview
 
 ## 🌐 Деплой на Vercel
 
-Проект автоматически настроен для деплоя на Vercel. Просто подключите репозиторий к Vercel.
+Проект автоматически настроен для деплоя на Vercel.
 
-Конфигурация в `vercel.json`:
-- Framework: Vite
-- Build: `cd frontend && npm run build`
+### Конфигурация Vercel
+
+Файл `vercel.json`:
+- Build: `cd frontend && npm install && npm run build`
 - Output: `frontend/dist`
+- Framework: null (автоопределение)
+
+### Переменные окружения
+
+Создайте файл `.env`:
+```
+VITE_API_URL=https://api.get-aist.ru
+```
+
+Или добавьте в Vercel Settings:
+- `VITE_API_URL` → URL вашего бэкенда
 
 ## 📝 Документация
 
 - [QUICK_START.md](QUICK_START.md) - Быстрый старт
 - [SUMMARY.md](SUMMARY.md) - Описание проекта
 - [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Руководство по деплою
+- [DEPLOY_INSTRUCTIONS.md](DEPLOY_INSTRUCTIONS.md) - Инструкции по деплою
 - [SECURITY.md](SECURITY.md) - Безопасность
 
 ## ✨ Возможности
@@ -79,6 +92,25 @@ npm run preview
 - 📱 Адаптивный дизайн
 - 🔍 Поиск по тегу (@username)
 - 💾 Локальное хранилище для оффлайн-режима
+
+## 🔧 Устранение проблем
+
+### Ошибка: "ajv/dist/compile/codegen"
+
+Обновите зависимости:
+```bash
+cd frontend
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Ошибка: "cross-env: команда не найдена"
+
+Убедитесь, что используете Vite (не Create React App):
+```bash
+cd frontend
+npm run build
+```
 
 ## 📄 Лицензия
 
