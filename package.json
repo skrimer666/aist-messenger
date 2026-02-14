@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "AIST Messenger - Frontend",
   "scripts": {
+    "postinstall": "cd frontend && npm install --legacy-peer-deps",
     "dev": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
-    "preview": "cd frontend && npm run preview",
-    "install": "cd frontend && npm install"
+    "preview": "cd frontend && npm run preview"
   },
   "keywords": [
     "messenger",
@@ -15,5 +15,8 @@
     "react"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

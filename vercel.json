@@ -1,9 +1,9 @@
 {
-  "buildCommand": "CI=false npm run build",
-  "outputDirectory": "build",
-  "devCommand": "npm start",
-  "installCommand": "npm install --legacy-peer-deps",
-  "framework": "create-react-app",
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/dist",
+  "devCommand": "cd frontend && npm run dev",
+  "installCommand": "cd frontend && npm install --legacy-peer-deps",
+  "framework": "vite",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -12,7 +12,7 @@
   ],
   "headers": [
     {
-      "source": "/static/(.*)",
+      "source": "/assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -22,3 +22,4 @@
     }
   ]
 }
+

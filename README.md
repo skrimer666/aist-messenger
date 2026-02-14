@@ -10,7 +10,7 @@ aist-messenger/
 │   ├── src/
 │   │   ├── components/   # Компоненты UI
 │   │   ├── context/      # React Context
-│   │   ├── lib/          # Утилиты (API, E2E, WebSocket)
+│   │   ├── lib/          # Утилиты (API, E2E, WebSocket, Storage)
 │   │   ├── pages/        # Страницы
 │   │   ├── constants/    # Константы
 │   │   ├── App.jsx       # Главный компонент
@@ -20,24 +20,26 @@ aist-messenger/
 │   ├── vite.config.js
 │   └── index.html
 ├── package.json       # Корневой для управления скриптами
+├── vercel.json        # Конфигурация Vercel
 └── README.md
 ```
 
 ## 🚀 Быстрый старт
 
-### Установка зависимостей
+### Локальная разработка
 
 ```bash
+# Вариант 1: Из корня
 npm install
-```
+npm run dev
 
-### Запуск в режиме разработки
-
-```bash
+# Вариант 2: Из папки frontend
+cd frontend
+npm install
 npm run dev
 ```
 
-- Фронтенд: http://localhost:5173
+Фронтенд: http://localhost:5173
 
 ### Сборка проекта
 
@@ -51,13 +53,14 @@ npm run build
 npm run preview
 ```
 
-## 🛠 Ручной запуск в папке frontend
+## 🌐 Деплой на Vercel
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+Проект автоматически настроен для деплоя на Vercel. Просто подключите репозиторий к Vercel.
+
+Конфигурация в `vercel.json`:
+- Framework: Vite
+- Build: `cd frontend && npm run build`
+- Output: `frontend/dist`
 
 ## 📝 Документация
 
@@ -71,9 +74,11 @@ npm run dev
 - 🔐 Сквозное шифрование (E2E)
 - 📞 Голосовые и видеозвонки (WebRTC)
 - 💬 Личные и групповые чаты
-- 📺 Каналы и истории
+- 📺 Каналы и истории (с локальным хранилищем)
 - 🎨 6 тем оформления
 - 📱 Адаптивный дизайн
+- 🔍 Поиск по тегу (@username)
+- 💾 Локальное хранилище для оффлайн-режима
 
 ## 📄 Лицензия
 
