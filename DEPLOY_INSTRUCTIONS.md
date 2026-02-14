@@ -11,10 +11,9 @@
 ### Конфигурация Vercel
 
 Файл `vercel.json` уже настроен:
-- **Framework**: Vite
-- **Build Command**: `cd frontend && npm run build`
+- **Framework**: null (автоопределение)
+- **Build Command**: `cd frontend && npm install && npm run build`
 - **Output Directory**: `frontend/dist`
-- **Install Command**: `cd frontend && npm install`
 
 ## 🖥️ Локальная разработка
 
@@ -38,6 +37,10 @@ npm run preview
 - **npm**: >= 9.0.0
 
 ## 🔧 Устранение проблем
+
+### Ошибка: "не удалось проанализировать исходный код для анализа импорта"
+
+Файл `frontend/src/index.jsx` имеет расширение `.jsx` для поддержки JSX. Убедитесь, что `frontend/index.html` ссылается на `/src/index.jsx`.
 
 ### Ошибка: "cross-env: команда не найдена"
 
@@ -82,7 +85,9 @@ aist-messenger/
 │   │   ├── components/
 │   │   ├── context/
 │   │   ├── lib/
-│   │   └── pages/
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   └── index.jsx  # Точка входа
 │   ├── package.json
 │   └── vite.config.js
 ├── vercel.json        # Конфигурация Vercel
@@ -91,9 +96,10 @@ aist-messenger/
 
 ## ✅ Проверка перед деплоем
 
-1. Убедитесь, что `frontend/package.json` использует Vite
-2. Проверьте, что `vercel.json` настроен правильно
-3. Убедитесь, что `.npmrc` не содержит `legacy-peer-deps=true`
+1. Убедитесь, что `frontend/src/index.jsx` существует
+2. Проверьте, что `frontend/index.html` ссылается на `/src/index.jsx`
+3. Убедитесь, что `vercel.json` настроен правильно
+4. Проверьте, что `.npmrc` не содержит `legacy-peer-deps=true`
 
 ## 🎯 После деплоя
 

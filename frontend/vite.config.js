@@ -16,4 +16,9 @@ export default defineConfig({
       },
     },
   },
+  esbuild: {
+    // Разрешаем JSX в .js файлах
+    jsx: 'automatic',
+    jsxImportSource: 'react',
+  },
 });
