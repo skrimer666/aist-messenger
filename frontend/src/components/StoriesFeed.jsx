@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import { IconClose, IconStories } from './Icons';
+import { IconClose, IconStories, IconRefresh } from './Icons';
 import { apiGetStories, apiViewStory } from '../lib/api';
+import { addTestStories, clearAllStories } from '../lib/storyStorage';
 
 export default function StoriesFeed() {
   const { theme, isDark } = useTheme();
@@ -18,11 +19,7 @@ export default function StoriesFeed() {
       setLoading(true);
       const fetchedStories = await apiGetStories();
       if (Array.isArray(fetchedStories)) {
-        // Фильтруем только пользователей с непросмотренными историями
-        const withUnviewed = fetchedStories.filter(user => 
-          user.stories && user.stories.some(s => !s.viewed)
-        );
-        setStories(withUnviewed);
+        setStories(fetchedStories);
       } else {
         setStories([]);
       }
@@ -36,6 +33,12 @@ export default function StoriesFeed() {
 
   useEffect(() => {
     loadStories();
+    
+    // Добавляем тестовые истории если нет локальных (для демонстрации)
+    const testStories = addTestStories();
+    if (testStories.length > 0) {
+      setStories(testStories);
+    }
     
     // Обновляем истории каждые 30 секунд
     const interval = setInterval(loadStories, 30000);
@@ -94,6 +97,13 @@ export default function StoriesFeed() {
       setSelectedStory(prevStory);
       setCurrentIndex(prevIndex);
     }
+  };
+
+  // Сбросить истории и создать тестовые
+  const handleResetStories = () => {
+    clearAllStories();
+    const testStories = addTestStories();
+    setStories(testStories);
   };
 
   // Обработка клика на области прогресса
@@ -297,6 +307,36 @@ export default function StoriesFeed() {
           <div style={styles.badge}>
             {allStories.length}
           </div>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleResetStories();
+            }}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: theme.textMuted,
+              cursor: 'pointer',
+              padding: 8,
+              borderRadius: 8,
+              marginLeft: 8,
+              transition: 'all 0.2s',
+            }}
+            title="Сбросить и создать тестовые истории"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)';
+              e.currentTarget.style.color = accent;
+              e.currentTarget.style.transform = 'rotate(180deg)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = theme.textMuted;
+              e.currentTarget.style.transform = 'rotate(0deg)';
+            }}
+          >
+            <IconRefresh width={16} height={16} />
+          </button>
         </div>
       </div>
 

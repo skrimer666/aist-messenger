@@ -222,30 +222,76 @@ export async function apiGetUser(identifier) {
 
 /** Получить список историй */
 export async function apiGetStories() {
-  if (!getToken()) return null;
-  try {
-    return await request('GET', '/api/stories');
-  } catch {
-    return null;
+  // Сначала пробуем получить с сервера
+  if (getToken()) {
+    try {
+      const serverStories = await request('GET', '/api/stories');
+      if (Array.isArray(serverStories)) {
+        // Обновляем локальное хранилище данными с сервера
+        const { saveStories, getUnviewedStories } = await import('./storyStorage');
+        saveStories(serverStories);
+        return serverStories;
+      }
+    } catch (error) {
+      console.log('Server stories not available, using local storage');
+    }
   }
+  
+  // Если сервер недоступен, используем локальное хранилище
+  const { getUnviewedStories } = await import('./storyStorage');
+  return getUnviewedStories();
 }
 
 /** Отметить историю как просмотренную */
 export async function apiViewStory(storyId) {
-  if (!getToken() || !storyId) return null;
-  try {
-    return await request('POST', `/api/stories/${storyId}/view`);
-  } catch {
-    return null;
+  // Сначала отмечаем локально
+  const { markStoryAsViewed } = await import('./storyStorage');
+  markStoryAsViewed(storyId);
+  
+  // Затем отправляем на сервер если доступен
+  if (getToken()) {
+    try {
+      return await request('POST', `/api/stories/${storyId}/view`);
+    } catch {
+      // Ошибка не критична, т.к. уже отмечено локально
+      return { ok: true };
+    }
   }
+  
+  return { ok: true };
 }
 
 /** Создать историю */
 export async function apiCreateStory(data) {
-  if (!getToken()) return null;
-  try {
-    return await request('POST', '/api/stories', data);
-  } catch {
-    return null;
+  const { addStory } = await import('./storyStorage');
+  
+  // Сначала создаём локально
+  const newStory = addStory(data);
+  
+  // Затем отправляем на сервер если доступен
+  if (getToken()) {
+    try {
+      const serverStory = await request('POST', '/api/stories', data);
+      if (serverStory?.id) {
+        // Обновляем ID на тот, что с сервера
+        const { getStories, saveStories } = await import('./storyStorage');
+        const stories = getStories();
+        // Находим и обновляем историю по временному ID
+        for (const user of stories) {
+          const storyIndex = user.stories?.findIndex(s => s.id === newStory.id);
+          if (storyIndex >= 0) {
+            user.stories[storyIndex] = { ...user.stories[storyIndex], ...serverStory };
+            saveStories(stories);
+            break;
+          }
+        }
+        return serverStory;
+      }
+    } catch {
+      // Ошибка не критична, т.к. уже создано локально
+      return newStory;
+    }
   }
+  
+  return newStory;
 }
