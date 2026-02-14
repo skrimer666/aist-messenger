@@ -1,4 +1,4 @@
-# AIST Messenger
+# AIST Messenger Frontend
 
 Современный мессенджер с фокусом на безопасность и конфиденциальность.
 
@@ -8,13 +8,19 @@
 aist-messenger/
 ├── frontend/          # React фронтенд (Vite)
 │   ├── src/
+│   │   ├── components/   # Компоненты UI
+│   │   ├── context/      # React Context
+│   │   ├── lib/          # Утилиты (API, E2E, WebSocket)
+│   │   ├── pages/        # Страницы
+│   │   ├── constants/    # Константы
+│   │   ├── App.jsx       # Главный компонент
+│   │   └── index.js      # Точка входа
 │   ├── public/
 │   ├── package.json
-│   └── vite.config.js
-├── backend/           # Node.js бэкенд (Express)
-│   ├── src/
-│   └── package.json
-└── package.json       # Корневой для управления скриптами
+│   ├── vite.config.js
+│   └── index.html
+├── package.json       # Корневой для управления скриптами
+└── README.md
 ```
 
 ## 🚀 Быстрый старт
@@ -22,7 +28,7 @@ aist-messenger/
 ### Установка зависимостей
 
 ```bash
-npm run install:all
+npm install
 ```
 
 ### Запуск в режиме разработки
@@ -32,7 +38,6 @@ npm run dev
 ```
 
 - Фронтенд: http://localhost:5173
-- Бэкенд: http://localhost:3000
 
 ### Сборка проекта
 
@@ -43,23 +48,13 @@ npm run build
 ### Запуск production версии
 
 ```bash
-npm run start
+npm run preview
 ```
 
-## 🛠 Отдельный запуск
-
-### Только фронтенд
+## 🛠 Ручной запуск в папке frontend
 
 ```bash
 cd frontend
-npm install
-npm run dev
-```
-
-### Только бэкенд
-
-```bash
-cd backend
 npm install
 npm run dev
 ```
