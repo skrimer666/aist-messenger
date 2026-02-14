@@ -11,6 +11,7 @@ import {
 import CallScreen from './CallScreen';
 import MentionInput from './MentionInput';
 import NewChatModal from './NewChatModal';
+import StoriesFeed from './StoriesFeed';
 import {
   getChatList,
   saveChatList,
@@ -700,25 +701,7 @@ export default function Chats() {
             >{f.name}</button>
           ))}
         </div>
-        {/* Истории */}
-        <div style={{ padding: '12px 16px 8px', display: 'flex', gap: 12, overflowX: 'auto', flexShrink: 0, borderBottom: `1px solid ${theme.border}` }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0, cursor: 'pointer' }}>
-            <div style={{ width: 62, height: 62, borderRadius: '50%', background: `linear-gradient(135deg, ${accent}, ${accent}dd)`, padding: 3, boxShadow: `0 4px 14px ${theme.glow || 'rgba(10, 132, 255, .3)'}` }}>
-              <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: theme.sidebarBg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.text, fontSize: 24 }}>+</div>
-            </div>
-            <span style={{ fontSize: 11, color: theme.textMuted, fontWeight: 500 }}>Моя история</span>
-          </div>
-          {chatsByFolder.slice(0, 8).map((chat) => (
-            <div key={`story-${chat.id}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0, cursor: 'pointer' }}>
-              <div style={{ width: 62, height: 62, borderRadius: '50%', background: `linear-gradient(135deg, ${accent}, ${accent}dd)`, padding: 3, boxShadow: `0 4px 14px ${theme.glow || 'rgba(10, 132, 255, .3)'}` }}>
-                <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: theme.cardBg, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  {chat.photo ? <img src={chat.photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <span style={{ fontSize: 20, fontWeight: 600, color: theme.text }}>{chat.name?.[0]?.toUpperCase() || '?'}</span>}
-                </div>
-              </div>
-              <span style={{ fontSize: 11, color: theme.textMuted, fontWeight: 500, maxWidth: 60, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{chat.name}</span>
-            </div>
-          ))}
-        </div>
+        <StoriesFeed />
         <div className="scrollable" style={s.chatList}>
           {chatsByFolder.length === 0 && (
             <div style={{ padding: 24, textAlign: 'center', color: theme.textMuted, fontSize: 15 }}>Нет чатов в этой папке</div>

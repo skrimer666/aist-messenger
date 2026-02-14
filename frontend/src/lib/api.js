@@ -219,3 +219,33 @@ export async function apiGetUser(identifier) {
     return null;
   }
 }
+
+/** Получить список историй */
+export async function apiGetStories() {
+  if (!getToken()) return null;
+  try {
+    return await request('GET', '/api/stories');
+  } catch {
+    return null;
+  }
+}
+
+/** Отметить историю как просмотренную */
+export async function apiViewStory(storyId) {
+  if (!getToken() || !storyId) return null;
+  try {
+    return await request('POST', `/api/stories/${storyId}/view`);
+  } catch {
+    return null;
+  }
+}
+
+/** Создать историю */
+export async function apiCreateStory(data) {
+  if (!getToken()) return null;
+  try {
+    return await request('POST', '/api/stories', data);
+  } catch {
+    return null;
+  }
+}

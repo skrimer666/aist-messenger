@@ -451,6 +451,9 @@ export function IconClose(props) {
   );
 }
 
+// Алиас для IconClose
+export const IconCloseIcon = IconClose;
+
 export function IconMenu(props) {
   const { width = size, height = size, style, ...rest } = props;
   return (
