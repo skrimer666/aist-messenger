@@ -6,12 +6,14 @@ import {
   IconBack, IconSearch, IconPen, IconChannel, IconChevronRight,
   IconPhone, IconVideo, IconAttach, IconSend, IconSmile, IconMore,
   IconStories, IconGallery, IconContacts, IconCheck, IconCheckDouble,
-  IconCopy, IconDelete, IconReply, IconForward, IconPin, IconMute
+  IconCopy, IconDelete, IconReply, IconForward, IconPin, IconMute, IconSettings
 } from './Icons';
 import CallScreen from './CallScreen';
 import MentionInput from './MentionInput';
 import NewChatModal from './NewChatModal';
 import StoriesFeed from './StoriesFeed';
+import GroupSettings from './GroupSettings';
+import ChannelSettings from './ChannelSettings';
 import {
   getChatList,
   saveChatList,
@@ -22,6 +24,7 @@ import {
   createChat,
   getChannelMeta,
   saveChannelMeta,
+  deleteChat as deleteChatFromStorage,
 } from '../lib/chatStorage';
 import { apiGetChats, apiGetMessages, apiSendMessage, apiCreateChat } from '../lib/api';
 import { getFolders, addChatToFolder, removeChatFromFolder, getChatFolderIds } from '../lib/folderStorage';

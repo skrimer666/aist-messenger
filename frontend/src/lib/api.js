@@ -190,6 +190,66 @@ export async function apiGetUser(identifier) {
   }
 }
 
+/** Получить информацию о чате */
+export async function apiGetChat(chatId) {
+  if (!getToken() || !chatId) return null;
+  try {
+    return await request('GET', `/api/chats/${encodeURIComponent(chatId)}`);
+  } catch {
+    return null;
+  }
+}
+
+/** Обновить чат */
+export async function apiUpdateChat(chatId, data) {
+  if (!getToken() || !chatId) return null;
+  try {
+    return await request('PUT', `/api/chats/${encodeURIComponent(chatId)}`, data);
+  } catch {
+    return null;
+  }
+}
+
+/** Удалить чат */
+export async function apiDeleteChat(chatId) {
+  if (!getToken() || !chatId) return null;
+  try {
+    return await request('DELETE', `/api/chats/${encodeURIComponent(chatId)}`);
+  } catch {
+    return null;
+  }
+}
+
+/** Добавить участника в чат */
+export async function apiAddMember(chatId, data) {
+  if (!getToken() || !chatId) return null;
+  try {
+    return await request('POST', `/api/chats/${encodeURIComponent(chatId)}/members`, data);
+  } catch {
+    return null;
+  }
+}
+
+/** Удалить участника из чата */
+export async function apiRemoveMember(chatId, userId) {
+  if (!getToken() || !chatId || !userId) return null;
+  try {
+    return await request('DELETE', `/api/chats/${encodeURIComponent(chatId)}/members/${encodeURIComponent(userId)}`);
+  } catch {
+    return null;
+  }
+}
+
+/** Обновить роль участника */
+export async function apiUpdateMemberRole(chatId, userId, role) {
+  if (!getToken() || !chatId || !userId) return null;
+  try {
+    return await request('PUT', `/api/chats/${encodeURIComponent(chatId)}/members/${encodeURIComponent(userId)}`, { role });
+  } catch {
+    return null;
+  }
+}
+
 /** Получить список историй */
 export async function apiGetStories() {
   // Сначала пробуем получить с сервера

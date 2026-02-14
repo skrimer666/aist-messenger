@@ -108,3 +108,26 @@ export function createChat({ id, name, type = 'user', avatar, description, share
   }
   return chatId;
 }
+
+/** Удалить чат */
+export function deleteChat(chatId) {
+  const list = getChatList();
+  const filtered = list.filter(c => c.id !== chatId);
+  saveChatList(filtered);
+  
+  // Удаляем сообщения чата
+  try {
+    localStorage.removeItem(getChatKey(chatId));
+  } catch {
+    // Игнорируем ошибки
+  }
+  
+  // Удаляем метаданные канала
+  try {
+    localStorage.removeItem(CHANNEL_META_PREFIX + chatId);
+  } catch {
+    // Игнорируем ошибки
+  }
+  
+  return filtered;
+}
