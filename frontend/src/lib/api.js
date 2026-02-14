@@ -118,41 +118,11 @@ export async function apiSetPublicKey(publicKeyPem) {
 
 // ——— Stories API ———
 
-/** Получить истории от подписанных пользователей */
-export async function apiGetStories() {
-  if (!getToken()) return null;
-  try {
-    return await request('GET', '/api/stories');
-  } catch {
-    return null;
-  }
-}
-
 /** Получить мои истории */
 export async function apiGetMyStories() {
   if (!getToken()) return null;
   try {
     return await request('GET', '/api/stories/my');
-  } catch {
-    return null;
-  }
-}
-
-/** Создать историю */
-export async function apiCreateStory({ mediaUrl, mediaType, caption }) {
-  if (!getToken()) return null;
-  try {
-    return await request('POST', '/api/stories', { mediaUrl, mediaType, caption });
-  } catch {
-    return null;
-  }
-}
-
-/** Отметить историю как просмотренную */
-export async function apiViewStory(storyId) {
-  if (!getToken() || !storyId) return null;
-  try {
-    return await request('POST', `/api/stories/${encodeURIComponent(storyId)}/view`);
   } catch {
     return null;
   }
