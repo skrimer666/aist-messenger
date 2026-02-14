@@ -9,6 +9,8 @@ import {
   IconCopy, IconDelete, IconReply, IconForward, IconPin, IconMute
 } from './Icons';
 import CallScreen from './CallScreen';
+import MentionInput from './MentionInput';
+import NewChatModal from './NewChatModal';
 import {
   getChatList,
   saveChatList,
@@ -432,26 +434,12 @@ function ChatView({ chat, onBack }) {
           <input type="file" accept="image/*,video/*,.pdf,.doc,.docx" style={{ display: 'none' }} onChange={onAttach} />
           <IconAttach width={24} height={24} />
         </label>
-        <input
-          style={{
-            flex: 1, 
-            minWidth: 0, 
-            padding: '14px 20px', 
-            borderRadius: 24, 
-            border: 'none',
-            background: theme.messageInputBg || theme.inputBg, 
-            color: theme.text, 
-            fontSize: 15, 
-            outline: 'none', 
-            transition: 'all 0.2s ease', 
-            boxShadow: isDark ? '0 2px 8px rgba(0,0,0,.15)' : '0 2px 8px rgba(0,0,0,.05)'
-          }}
-          placeholder="Сообщение"
+        <MentionInput
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onFocus={(e) => e.currentTarget.style.boxShadow = `0 0 0 3px ${accent}20`}
-          onBlur={(e) => e.currentTarget.style.boxShadow = isDark ? '0 2px 8px rgba(0,0,0,.15)' : '0 2px 8px rgba(0,0,0,.05)'}
-          onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (attachPreview) sendMessage({ ...attachPreview, caption: inputValue }); else sendMessage(inputValue); } }}
+          onChange={setInputValue}
+          onSend={() => attachPreview ? sendMessage({ ...attachPreview, caption: inputValue }) : sendMessage(inputValue)}
+          placeholder="Сообщение"
+          style={{ flex: 1, minWidth: 0 }}
         />
         <button
           type="button"
@@ -564,30 +552,10 @@ export default function Chats() {
     return filteredChats.filter((c) => folder.chatIds.includes(c.id));
   }, [activeFolderId, filteredChats, folders]);
 
-  const createNewChat = async (type) => {
-    if (type === 'channel') {
-      setNewChatOpen(false);
-      navigate('/messenger/new-channel');
-      return;
-    }
-    if (type === 'group') {
-      setNewChatOpen(false);
-      navigate('/messenger/new-group');
-      return;
-    }
-    const name = window.prompt('Введите ник @ или имя пользователя');
-    if (!name?.trim()) return;
-    const peerUsername = name.trim().replace(/^@/, '');
-    const created = await apiCreateChat({ name: name.trim(), type: 'user', peerUsername });
-    if (created?.id) {
-      addOrUpdateChat({ id: created.id, name: created.name || name.trim(), type: 'user', lastMessage: '', lastTime: null, unread: 0, peerUserId: created.peerUserId });
-      await refreshList();
-      setSelectedChat(created);
-      setNewChatOpen(false);
-    } else {
-      window.alert('Пользователь с таким ником не найден. Убедитесь, что он зарегистрирован в AIST и указал никнейм в настройках.');
-    }
-  };
+  const handleChatCreated = useCallback((chat) => {
+    setSelectedChat(chat);
+    refreshList();
+  }, [refreshList]);
 
   useEffect(() => {
     if (!selectedChat) refreshList();
@@ -627,39 +595,7 @@ export default function Chats() {
   };
 
   if (newChatOpen) {
-    return (
-      <div style={{ ...s.container, flexDirection: 'column', width: '100%' }}>
-        <header style={s.header}>
-          <button type="button" style={{ border: 'none', background: 'transparent', color: theme.accent, padding: 8 }} onClick={() => setNewChatOpen(false)}>
-            <IconBack width={24} height={24} />
-          </button>
-          <span style={s.headerTitle}>Новое сообщение</span>
-          <span style={{ width: 40 }} />
-        </header>
-        <div style={s.search}>
-          <div style={s.searchWrap}>
-            <span style={s.searchIcon}><IconSearch width={20} height={20} /></span>
-            <input type="text" style={s.searchInput} placeholder="Поиск по нику или имени" />
-          </div>
-        </div>
-        <div style={{ flex: 1, overflowY: 'auto' }}>
-          <div style={{ ...s.chatItem, flexDirection: 'column', alignItems: 'flex-start' }} onClick={() => createNewChat('group')}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%' }}>
-              <div style={{ ...s.avatar, background: theme.sidebarBg, color: theme.text, fontSize: 24 }}>👥</div>
-              <div><div style={s.chatName}>Создать группу</div><div style={s.lastMsg}>Общий чат с несколькими участниками</div></div>
-              <IconChevronRight width={20} height={20} style={{ marginLeft: 'auto', color: theme.textMuted }} />
-            </div>
-          </div>
-          <div style={{ ...s.chatItem, flexDirection: 'column', alignItems: 'flex-start' }} onClick={() => createNewChat('channel')}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%' }}>
-              <div style={{ ...s.avatar, background: theme.sidebarBg, color: theme.text }}><IconChannel width={24} height={24} /></div>
-              <div><div style={s.chatName}>Создать канал</div><div style={s.lastMsg}>Публикация новостей для подписчиков</div></div>
-              <IconChevronRight width={20} height={20} style={{ marginLeft: 'auto', color: theme.textMuted }} />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <NewChatModal onClose={() => setNewChatOpen(false)} onChatCreated={handleChatCreated} />;
   }
 
   return (

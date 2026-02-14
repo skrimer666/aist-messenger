@@ -197,3 +197,25 @@ export async function apiGetStorySubscriptions() {
     return null;
   }
 }
+
+/** Поиск пользователей по имени или никнейму */
+export async function apiSearchUsers(query) {
+  if (!getToken() || !query) return null;
+  try {
+    const q = query.trim().toLowerCase().replace(/^@/, '');
+    if (q.length < 2) return [];
+    return await request('GET', `/api/users/search?q=${encodeURIComponent(q)}`);
+  } catch {
+    return null;
+  }
+}
+
+/** Получить информацию о пользователе по ID или никнейму */
+export async function apiGetUser(identifier) {
+  if (!getToken() || !identifier) return null;
+  try {
+    return await request('GET', `/api/users/${encodeURIComponent(identifier)}`);
+  } catch {
+    return null;
+  }
+}
