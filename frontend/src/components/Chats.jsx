@@ -204,25 +204,27 @@ function ChatView({ chat, onBack }) {
         </button>
         <button
           type="button"
-          onClick={() => chat.type === 'channel' && setShowChannelInfo(true)} 
+          onClick={() => chat.type === 'channel' ? setShowChannelInfo(true) : (chat.type === 'group' ? setShowGroupSettings(true) : null)} 
           style={{
             flex: 1, 
             border: 'none',
             background: 'transparent', 
             padding: '10px 12px', 
-            cursor: chat.type === 'channel' ? 'pointer' : 'default', 
+            cursor: chat.type !== 'user' ? 'pointer' : 'default', 
             textAlign: 'left', 
             minWidth: 0, 
             borderRadius: 12, 
             transition: 'background 0.2s ease' 
           }}
-          onMouseEnter={(e) => chat.type === 'channel' && (e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)')}
+          onMouseEnter={(e) => chat.type !== 'user' && (e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.04)')}
           onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
         >
           <span style={{ fontWeight: 700, fontSize: 18, color: theme.text, display: 'block', letterSpacing: '-0.3px' }}>{chat.name}</span>
-          {chat.type !== 'channel' && <span style={{ fontSize: 13, color: theme.textMuted, fontWeight: 500 }}>онлайн</span>}
+          {chat.type === 'user' && <span style={{ fontSize: 13, color: theme.textMuted, fontWeight: 500 }}>онлайн</span>}
+          {chat.type === 'group' && <span style={{ fontSize: 13, color: theme.textMuted, fontWeight: 500 }}>группа</span>}
+          {chat.type === 'channel' && <span style={{ fontSize: 13, color: theme.textMuted, fontWeight: 500 }}>канал</span>}
         </button>
-        {chat.type !== 'channel' && (
+        {chat.type === 'user' && (
           <>
             <button 
               type="button" 
@@ -260,24 +262,27 @@ function ChatView({ chat, onBack }) {
             >
               <IconVideo width={22} height={22} />
             </button>
-            <button 
-              type="button" 
-              style={{ 
-                border: 'none', 
-                background: 'transparent', 
-                padding: 10, 
-                color: theme.textMuted, 
-                cursor: 'pointer', 
-                borderRadius: 12, 
-                transition: 'all 0.2s ease' 
-              }} 
-              aria-label="Ещё"
-              onMouseEnter={(e) => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'; e.currentTarget.style.transform = 'scale(1.08)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; }}
-            >
-              <IconMore width={22} height={22} />
-            </button>
           </>
+        )}
+        {(chat.type === 'group' || chat.type === 'channel') && (
+          <button 
+            type="button" 
+            style={{ 
+              border: 'none', 
+              background: 'transparent', 
+              padding: 10,
+              color: theme.textMuted, 
+              cursor: 'pointer',
+              borderRadius: 12, 
+              transition: 'all 0.2s ease' 
+            }} 
+            aria-label="Настройки"
+            onClick={() => chat.type === 'group' ? setShowGroupSettings(true) : setShowChannelSettings(true)}
+            onMouseEnter={(e) => { e.currentTarget.style.background = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)'; e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.color = accent; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.color = theme.textMuted; }}
+          >
+            <IconSettings width={22} height={22} />
+          </button>
         )}
       </header>
       {showChannelInfo && channelMeta && (
@@ -499,6 +504,8 @@ export default function Chats() {
   const [foldersRefresh, setFoldersRefresh] = useState(0);
   const [folderMenuChatId, setFolderMenuChatId] = useState(null);
   const folderMenuRef = useRef(null);
+  const [showGroupSettings, setShowGroupSettings] = useState(false);
+  const [showChannelSettings, setShowChannelSettings] = useState(false);
   const folders = useMemo(() => getFolders(), [foldersRefresh]);
 
   useEffect(() => {
@@ -803,6 +810,34 @@ export default function Chats() {
           </div>
         )}
       </div>
+      {showGroupSettings && selectedChat && (
+        <GroupSettings
+          chatId={selectedChat.id}
+          onClose={() => setShowGroupSettings(false)}
+          onUpdate={(updated) => {
+            if (updated) {
+              setSelectedChat(updated);
+              addOrUpdateChat(updated);
+            } else {
+              setSelectedChat(null);
+            }
+          }}
+        />
+      )}
+      {showChannelSettings && selectedChat && (
+        <ChannelSettings
+          chatId={selectedChat.id}
+          onClose={() => setShowChannelSettings(false)}
+          onUpdate={(updated) => {
+            if (updated) {
+              setSelectedChat(updated);
+              addOrUpdateChat(updated);
+            } else {
+              setSelectedChat(null);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
