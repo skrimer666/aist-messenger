@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "AIST Messenger - Frontend",
   "scripts": {
-    "postinstall": "cd frontend && npm install --legacy-peer-deps",
+    "postinstall": "cd frontend && npm install",
     "dev": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
     "preview": "cd frontend && npm run preview"
@@ -20,3 +20,4 @@
     "node": ">=18.0.0"
   }
 }
+

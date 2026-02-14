@@ -1,4 +1,5 @@
 #!/bin/bash
 set -e
-npm install --legacy-peer-deps
-CI=false npm run build
+cd frontend
+npm install
+npm run build
