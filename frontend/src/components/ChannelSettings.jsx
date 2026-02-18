@@ -603,7 +603,7 @@ export default function ChannelSettings({ chatId, onClose, onUpdate }) {
               <input type="checkbox" defaultChecked style={{ width: 18, height: 18 }} />
             </div>
 
-            <div style={styles.toggleRow} style={{ borderBottom: 'none' }}>
+            <div style={{ ...styles.toggleRow, borderBottom: 'none' }}>
               <span style={styles.toggleLabel}>
                 Модераторы могут удалять сообщения
               </span>
@@ -634,7 +634,7 @@ export default function ChannelSettings({ chatId, onClose, onUpdate }) {
               <input type="checkbox" style={{ width: 18, height: 18 }} />
             </div>
 
-            <div style={styles.toggleRow} style={{ borderBottom: 'none' }}>
+            <div style={{ ...styles.toggleRow, borderBottom: 'none' }}>
               <span style={styles.toggleLabel}>
                 Уведомлять только от админов
               </span>
