@@ -7,6 +7,7 @@ import ChannelCreatePage from './pages/ChannelCreatePage';
 import GroupCreatePage from './pages/GroupCreatePage';
 import UserAgreement from './pages/UserAgreement';
 import { CallProvider } from './context/CallContext';
+import { initSyncManager, stopPeriodicSync } from './lib/syncManager';
 
 function PrivateRoute({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -57,7 +58,6 @@ function App() {
     document.body.style.padding = '0';
 
     // Инициализируем менеджер синхронизации для PWA
-    const { initSyncManager } = require('./lib/syncManager');
     initSyncManager();
 
     // Определяем режим: мессенджер или лэндинг
@@ -77,7 +77,6 @@ function App() {
     // Очистка при размонтировании
     return () => {
       document.body.classList.remove('messenger-mode', 'landing-mode');
-      const { stopPeriodicSync } = require('./lib/syncManager');
       stopPeriodicSync();
     };
   }, []);

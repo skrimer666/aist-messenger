@@ -265,7 +265,7 @@ async function handleSyncMessage(data) {
   try {
     switch (syncType) {
       case 'message':
-        await handleSyncMessage(payload);
+        await handleSyncedMessage(payload);
         break;
         
       case 'messages_read':
@@ -297,7 +297,7 @@ async function handleSyncMessage(data) {
 /**
  * Обработка синхронизированного сообщения
  */
-async function handleSyncMessage(payload) {
+async function handleSyncedMessage(payload) {
   const { appendMessage } = await import('./chatStorage.js');
   await appendMessage(payload.chatId, payload);
   
