@@ -56,6 +56,10 @@ function App() {
     document.body.style.margin = '0';
     document.body.style.padding = '0';
 
+    // Инициализируем менеджер синхронизации для PWA
+    const { initSyncManager } = require('./lib/syncManager');
+    initSyncManager();
+
     // Определяем режим: мессенджер или лэндинг
     const token = localStorage.getItem('aist_token');
     const isMessengerPath = window.location.pathname.startsWith('/messenger');
@@ -73,6 +77,8 @@ function App() {
     // Очистка при размонтировании
     return () => {
       document.body.classList.remove('messenger-mode', 'landing-mode');
+      const { stopPeriodicSync } = require('./lib/syncManager');
+      stopPeriodicSync();
     };
   }, []);
 

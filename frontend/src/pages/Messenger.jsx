@@ -4,6 +4,8 @@ import Calls from '../components/Calls';
 import Status from '../components/Status';
 import Settings from '../components/Settings';
 import CallScreen from '../components/CallScreen';
+import { PWAInstall } from '../components/PWAInstall';
+import { SyncStatus } from '../components/SyncStatus';
 import { useTheme } from '../context/ThemeContext';
 import { useCall } from '../context/CallContext';
 import { getChatList } from '../lib/chatStorage';
@@ -144,6 +146,9 @@ export default function Messenger() {
 
   return (
     <div style={styles.container}>
+      {/* PWA Install Banner */}
+      <PWAInstall />
+      
       {activeIncomingCall && (
         <CallScreen
           peerName={peerNameFromId(activeIncomingCall.fromUserId)}
@@ -220,6 +225,10 @@ export default function Messenger() {
                 <span>{tab.label}</span>
               </button>
             ))}
+            {/* Sync Status для десктопа */}
+            <div style={{ marginTop: 'auto', marginBottom: 12 }}>
+              <SyncStatus compact />
+            </div>
           </nav>
         )}
         <main style={styles.main}>
@@ -248,6 +257,10 @@ export default function Messenger() {
               <span>{tab.label}</span>
             </button>
           ))}
+          {/* Sync Status для мобильных */}
+          <div style={{ position: 'absolute', top: 8, right: 8 }}>
+            <SyncStatus compact />
+          </div>
         </nav>
       )}
     </div>

@@ -325,3 +325,75 @@ export async function apiCreateStory(data) {
   
   return newStory;
 }
+
+// ——— Sync API ———
+
+/** Получить изменения с сервера для синхронизации */
+export async function apiGetSyncChanges(since, deviceId) {
+  if (!getToken()) return null;
+  try {
+    return await request('GET', `/api/sync/changes?since=${since}&deviceId=${deviceId}`);
+  } catch {
+    return null;
+  }
+}
+
+/** Отправить операцию синхронизации на сервер */
+export async function apiSyncOperation(operation) {
+  if (!getToken()) return null;
+  try {
+    return await request('POST', '/api/sync/operation', operation);
+  } catch {
+    return null;
+  }
+}
+
+/** Зарегистрировать устройство для push-уведомлений */
+export async function apiRegisterDevice(subscription) {
+  if (!getToken()) return null;
+  try {
+    return await request('POST', '/api/devices/register', subscription);
+  } catch {
+    return null;
+  }
+}
+
+/** Отменить регистрацию устройства */
+export async function apiUnregisterDevice(deviceId) {
+  if (!getToken()) return null;
+  try {
+    return await request('DELETE', `/api/devices/${deviceId}`);
+  } catch {
+    return null;
+  }
+}
+
+/** Получить список устройств пользователя */
+export async function apiGetDevices() {
+  if (!getToken()) return null;
+  try {
+    return await request('GET', '/api/devices');
+  } catch {
+    return null;
+  }
+}
+
+/** Отправить настройки на сервер */
+export async function apiSyncSettings(settings) {
+  if (!getToken()) return null;
+  try {
+    return await request('POST', '/api/settings', settings);
+  } catch {
+    return null;
+  }
+}
+
+/** Получить настройки с сервера */
+export async function apiGetSettings() {
+  if (!getToken()) return null;
+  try {
+    return await request('GET', '/api/settings');
+  } catch {
+    return null;
+  }
+}

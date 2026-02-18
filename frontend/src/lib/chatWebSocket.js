@@ -1,6 +1,7 @@
 /**
  * WebSocket для получения сообщений в реальном времени
  * Улучшенная версия с более надёжной обработкой соединения
+ * Поддержка синхронизации между устройствами
  */
 import { getWsUrl } from './api';
 
@@ -14,6 +15,9 @@ let pendingMessages = [];
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 10;
 const RECONNECT_DELAY = 3000; // 3 секунды
+
+// Идентификатор устройства для синхронизации
+let deviceId = null;
 
 /**
  * Подключиться к WebSocket
@@ -36,7 +40,13 @@ export function connectChatWebSocket(token, onMessage) {
   }
 
   isConnecting = true;
-  const url = `${getWsUrl()}?token=${encodeURIComponent(token)}`;
+  
+  // Получаем ID устройства для синхронизации
+  deviceId = localStorage.getItem('aist_device_id');
+  
+  const url = deviceId 
+    ? `${getWsUrl()}?token=${encodeURIComponent(token)}&deviceId=${encodeURIComponent(deviceId)}`
+    : `${getWsUrl()}?token=${encodeURIComponent(token)}`;
 
   try {
     ws = new WebSocket(url);
@@ -73,6 +83,12 @@ export function connectChatWebSocket(token, onMessage) {
 
         // Обработка heartbeat
         if (data.type === 'pong') {
+          return;
+        }
+
+        // Обработка сообщений синхронизации
+        if (data.type === 'sync') {
+          handleSyncMessage(data);
           return;
         }
 
@@ -236,4 +252,119 @@ export function isWebSocketConnecting() {
  */
 export function getReconnectAttempts() {
   return reconnectAttempts;
+}
+
+/**
+ * Обработка сообщений синхронизации с других устройств
+ */
+async function handleSyncMessage(data) {
+  console.log('[ChatWS] Handling sync message:', data);
+  
+  const { syncType, payload } = data;
+  
+  try {
+    switch (syncType) {
+      case 'message':
+        await handleSyncMessage(payload);
+        break;
+        
+      case 'messages_read':
+        await handleMessagesRead(payload);
+        break;
+        
+      case 'chat_updated':
+        await handleChatUpdated(payload);
+        break;
+        
+      case 'member_added':
+      case 'member_removed':
+      case 'member_role_changed':
+        await handleMemberChanged(payload);
+        break;
+        
+      case 'typing':
+        // Обработка индикатора набора текста
+        break;
+        
+      default:
+        console.warn('[ChatWS] Unknown sync type:', syncType);
+    }
+  } catch (error) {
+    console.error('[ChatWS] Error handling sync message:', error);
+  }
+}
+
+/**
+ * Обработка синхронизированного сообщения
+ */
+async function handleSyncMessage(payload) {
+  const { appendMessage } = await import('./chatStorage.js');
+  await appendMessage(payload.chatId, payload);
+  
+  // Уведомляем слушателей о новом сообщении
+  listeners.forEach(listener => {
+    try {
+      listener({ type: 'message', ...payload });
+    } catch (e) {
+      console.error('[ChatWS] Error in listener:', e);
+    }
+  });
+}
+
+/**
+ * Обработка синхронизации прочитанных сообщений
+ */
+async function handleMessagesRead(payload) {
+  const { chatId, userId, lastReadId } = payload;
+  
+  // Обновляем локальное хранилище
+  const messages = await (await import('./chatStorage.js')).getMessages(chatId);
+  const updatedMessages = messages.map(msg => {
+    if (msg.senderId === userId && msg.id <= lastReadId) {
+      return { ...msg, read: true };
+    }
+    return msg;
+  });
+  
+  await (await import('./chatStorage.js')).saveMessages(chatId, updatedMessages);
+  
+  // Уведомляем слушателей
+  listeners.forEach(listener => {
+    try {
+      listener({ type: 'messages_read', chatId, userId, lastReadId });
+    } catch (e) {
+      console.error('[ChatWS] Error in listener:', e);
+    }
+  });
+}
+
+/**
+ * Обработка обновления чата
+ */
+async function handleChatUpdated(payload) {
+  const { addOrUpdateChat } = await import('./chatStorage.js');
+  addOrUpdateChat(payload);
+  
+  // Уведомляем слушателей
+  listeners.forEach(listener => {
+    try {
+      listener({ type: 'chat_updated', ...payload });
+    } catch (e) {
+      console.error('[ChatWS] Error in listener:', e);
+    }
+  });
+}
+
+/**
+ * Обработка изменений участников чата
+ */
+async function handleMemberChanged(payload) {
+  // Уведомляем слушателей
+  listeners.forEach(listener => {
+    try {
+      listener({ type: 'members_changed', ...payload });
+    } catch (e) {
+      console.error('[ChatWS] Error in listener:', e);
+    }
+  });
 }
